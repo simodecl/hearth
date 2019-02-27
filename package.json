@@ -1,0 +1,19 @@
+{
+  "name": "hearth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simodecl/hearth.git"
+  },
+  "author": "Simon Decloedt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simodecl/hearth/issues"
+  },
+  "homepage": "https://github.com/simodecl/hearth#readme"
+}
