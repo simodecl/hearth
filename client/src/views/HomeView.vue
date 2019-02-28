@@ -3,6 +3,10 @@
         <img class="logo" src="../assets/hearth_logo_multicolor.png" />
         <h1 class="title">Hearth</h1>
         <div class="subtitle">Pull up a chair by the Hearth!</div>
+        <div class="btns">
+            <button class="btn btn-create">Create room</button>
+            <button class="btn btn-join">Join room</button>
+        </div>
     </div>
 </template>
 
@@ -32,5 +36,31 @@
     text-align: center;
     color: $lightgrey;
     font-size: 1.4rem;
+}
+
+.btns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.btn {
+    width: 300px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: solid 1px white;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+}
+
+.btn-create {
+    background-color: $darkred;
+}
+
+.btn-join {
+    background-color: $lightred;
 }
 </style>
