@@ -60,17 +60,16 @@ table {
 }
 
 // Custom css
-$darkgrey: #121212;
-$grey: #212121;
-$lightgrey: #535353;
-$darkred: #6F2232;
-$red: #950740;
-$lightred: #C3073F;
+@import url('https://fonts.googleapis.com/css?family=Rubik:700');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+@import "./styles/variables.scss";
 
 #app {
 	height: 100%;
 	min-height: 100%;
   background-color: $darkgrey;
+  color: white;
+  font-family: 'Lato', sans-serif;
 }
 </style>
 
