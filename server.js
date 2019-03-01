@@ -6,6 +6,8 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+const admin = require('firebase-admin');
+const serviceAccount = require('./server/config/firebase.json');
 
 /*
 Custom Routes
@@ -18,6 +20,16 @@ Settings
 
 const server = http.createServer(app)
 const port = process.env.PORT || '8080';
+
+
+/*
+Firebase Settings
+*/
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://hearth-40878.firebaseio.com"
+});
 
 /*
 Express.js settings

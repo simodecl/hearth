@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/simodecl/hearth/issues"
   },
-  "homepage": "https://github.com/simodecl/hearth#readme"
+  "homepage": "https://github.com/simodecl/hearth#readme",
+  "dependencies": {
+    "firebase-admin": "^7.0.0"
+  }
 }
