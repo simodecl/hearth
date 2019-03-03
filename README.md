@@ -33,8 +33,17 @@ npm run lint
 npm run server
 ```
 
+---
 ## Environment Variables
 
 ```
 FIREBASE_DB=https://database-13579.firebaseio.com
+```
+
+---
+## API Routes
+
+### Create a new room
+```
+POST /api/v1/rooms
 ```
