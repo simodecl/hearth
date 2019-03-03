@@ -4,6 +4,7 @@
 ```
 npm install
 ```
+## Front-end scripts
 
 ### Compiles and hot-reloads for development
 ```
@@ -25,5 +26,15 @@ npm run test
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Back-end scripts
+
+### Start server with auto-reload for development
+```
+npm run server
+```
+
+## Environment Variables
+
+```
+FIREBASE_DB=https://database-13579.firebaseio.com
+```
