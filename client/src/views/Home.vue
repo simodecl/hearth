@@ -10,6 +10,25 @@
     </div>
 </template>
 
+<script>
+export default {
+    name: 'Home',
+    sockets: {
+        connect: () => {
+            console.log('socket connected')
+        },
+        disconnect: () => {
+            console.log('socket disconnected')
+        }
+    },
+    created() {
+        this.$socket.emit('tv connect')
+    }
+
+}
+</script>
+
+
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Rubik:700');
 @import "../styles/variables.scss";
