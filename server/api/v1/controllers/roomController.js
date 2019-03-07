@@ -24,10 +24,10 @@ exports.create_room = (req, res, next) => {
 
 exports.join_room = (req, res, next) => {
     if(!req.body || !req.body.socket) {
-        return errorHandler.handleAPIError(400, 'Your request does not contain a socket ID', next);
+        return errorHandler.handleAPIError(400, 'Your request does not contain a socket ID', next)
       }
 
-    const roomRef = db.collection('rooms').doc(req.params.room);
+    const roomRef = db.collection('rooms').doc(req.params.room)
 
     roomRef.get()
         .then(room => {
@@ -49,10 +49,10 @@ exports.join_room = (req, res, next) => {
 
 exports.leave_room = (req, res, next) => {
     if(!req.body || !req.body.socket) {
-        return errorHandler.handleAPIError(400, 'Your request does not contain a socket ID', next);
+        return errorHandler.handleAPIError(400, 'Your request does not contain a socket ID', next)
       }
 
-    const roomRef = db.collection('rooms').doc(req.params.room);
+    const roomRef = db.collection('rooms').doc(req.params.room)
 
     roomRef.get()
         .then(room => {
