@@ -1,18 +1,23 @@
 <template>
     <div>
-        <img class="logo" src="../assets/hearth_logo_multicolor.png" />
-        <h1 class="title">Hearth</h1>
-        <div class="subtitle">Pull up a chair by the Hearth!</div>
+        <homelogo></homelogo>
         <div class="btns">
             <button class="btn btn-create">Create room</button>
-            <button class="btn btn-join">Join room</button>
+            <router-link to="/join">
+                <button class="btn btn-join">Join room</button>
+            </router-link>
         </div>
+        <img class="corner" src="../assets/corner.png" />
     </div>
 </template>
 
 <script>
+import HomeLogo from '../components/HomeLogo'
 export default {
     name: 'Home',
+    components: {
+        'homelogo': HomeLogo
+    },
     sockets: {
         connect: () => {
             console.log('socket connected')
@@ -32,30 +37,6 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Rubik:700');
 @import "../styles/variables.scss";
-
-.logo {
-    display: block;
-    margin: 0 auto;
-    height: 250px;
-    padding-top: 50px;
-}
-
-.title {
-    font-family: 'Rubik', sans-serif;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 4rem;
-    margin-top: 10px;
-}
-
-.subtitle {
-    font-family: 'Rubik', sans-serif;
-    font-weight: bold;
-    text-align: center;
-    color: $lightgrey;
-    font-size: 1.4rem;
-}
 
 .btns {
     display: flex;
@@ -81,5 +62,12 @@ export default {
 
 .btn-join {
     background-color: $lightred;
+}
+
+.corner {
+    position: absolute;
+    bottom: 0px;
+    width: 30vw;
+    max-width: 150px;
 }
 </style>

@@ -5,6 +5,7 @@
             <input type="text" placeholder="Enter code" />
             <button type="submit" class="btn btn-join">Join room</button>
         </form>
+        <img class="corner" src="../assets/corner.png" />
     </div>
 </template>
 
@@ -58,5 +59,12 @@ input {
 
 .btn-join {
     background-color: $lightred;
+}
+
+.corner {
+    position: absolute;
+    bottom: 0px;
+    width: 30vw;
+    max-width: 150px;
 }
 </style>
