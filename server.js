@@ -9,10 +9,14 @@ const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
+const RoomManager = require('./server/utils/roomManager')
+
+
 /*
 Custom Routes
 */
 const routes = require('./server/config/routes')
+
 
 /*
 Socket.io
@@ -20,17 +24,16 @@ Socket.io
 const views = {}
 
 io.on('connection', (socket) => {
-    socket.on('tv connect', () => {
+    socket.on('tv connect', (roomcode) => {
         console.log('A TV connected')
         views[socket.id] = socket
-    })
-    socket.on('app connect', () => {
-        console.log('Someone connected')
-        views[socket.id] = socket
+        views[socket.id].room = roomcode
+        RoomManager.join(views[socket.id].room, socket.id)
     })
     socket.on('disconnect', () => {
         if(views[socket.id]) {
-            console.log('Someone disconnected')
+            console.log('A TV disconnected')
+            RoomManager.leave(views[socket.id].room, socket.id)
             delete views[socket.id]
         }
     })

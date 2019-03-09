@@ -17,19 +17,7 @@ export default {
     name: 'Home',
     components: {
         'homelogo': HomeLogo
-    },
-    sockets: {
-        connect: () => {
-            console.log('socket connected')
-        },
-        disconnect: () => {
-            console.log('socket disconnected')
-        }
-    },
-    created() {
-        this.$socket.emit('tv connect')
     }
-
 }
 </script>
 

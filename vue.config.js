@@ -9,4 +9,12 @@ module.exports = {
             app: './client/src/main.js'
         }
     },
+    devServer: {
+        proxy: {
+            '^/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true
+            }
+        }
+     }  
 }
