@@ -4,9 +4,14 @@ import router from './router'
 import store from './store'
 import VueSocketIO from 'vue-socket.io'
 import './firebase'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 
 
 Vue.config.productionTip = false
+
+Vue.use(VueMaterial)
 Vue.use(new VueSocketIO({
   debug: true,
   connection: 'localhost:8000'

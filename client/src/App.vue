@@ -71,5 +71,13 @@ table {
   color: white;
   font-family: 'Lato', sans-serif;
 }
+
+// Changing some material css
+.md-overlay {
+	background: transparent !important;
+}
+.md-flex {
+	background-color: $darkgrey !important;
+}
 </style>
 

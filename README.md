@@ -38,6 +38,12 @@ npm run server
 
 ```
 FIREBASE_DB=https://database-13579.firebaseio.com
+VUE_APP_FIREBASE_DB=https://database-13579.firebaseio.com
+VUE_APP_FIREBASE_APIKEY=<firebase_api_key>
+VUE_APP_FIREBASE_DOMAIN=database-13579.firebaseapp.com
+VUE_APP_FIREBASE_PROJECTID=database-13579
+VUE_APP_FIREBASE_BUCKET=database-13579.appspot.com
+VUE_APP_FIREBASE_SENDER=<firebase_sender_id>
 ```
 
 ---
