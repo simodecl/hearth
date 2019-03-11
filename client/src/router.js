@@ -4,7 +4,6 @@ import Home from './views/Home.vue'
 import Join from './views/Join.vue'
 import Room from './views/Room.vue'
 import AppHome from './views/AppHome.vue'
-import AppRoom from './views/AppRoom.vue'
 
 Vue.use(Router)
 
@@ -33,9 +32,22 @@ export default new Router({
 		component: AppHome
 	},
 	{
-		path: '/app/room/:roomid',
-		name: 'approom',
-		component: AppRoom
+		path: "/app/room/:roomid/youtube",
+		name: "AppYoutube",
+		meta: { layout: "navbars" },
+		component: require("./views/AppYoutube.vue").default
+	},
+	{
+		path: "/app/room/:roomid/spotify",
+		name: "AppSpotify",
+		meta: { layout: "navbars" },
+		component: require("./views/AppSpotify.vue").default
+	},
+	{
+		path: "/app/room/:roomid/images",
+		name: "AppImages",
+		meta: { layout: "navbars" },
+		component: require("./views/AppImages.vue").default
 	},
   ]
 })

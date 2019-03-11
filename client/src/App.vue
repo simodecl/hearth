@@ -1,8 +1,29 @@
 <template>
   <div id="app">
-    <router-view />
+    <component :is="layout">
+    	<router-view/>
+    </component>
   </div>
 </template>
+
+<script>
+const default_layout = "default";
+export default {
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || default_layout) + "-layout";
+    }
+  },
+  created() {
+    // nothing defined here (when this.$route.path is other than "/")
+    console.log(this.$route, this.$route.meta.layout);
+  },
+  updated() {
+    // something defined here whatever the this.$route.path
+    console.log(this.$route, this.$route.meta.layout);
+  }
+};
+</script>
 
 <style lang="scss">
 // Reset css
@@ -67,17 +88,18 @@ table {
 #app {
 	height: 100%;
 	min-height: 100%;
-  background-color: $darkgrey;
-  color: white;
-  font-family: 'Lato', sans-serif;
+	background-color: $darkgrey;
+	color: white;
+	font-family: 'Lato', sans-serif;
 }
 
-// Changing some material css
-.md-overlay {
-	background: transparent !important;
+// Changing some vuetify css
+.v-overlay {
+	display: none !important;
 }
-.md-flex {
-	background-color: $darkgrey !important;
+
+.v-ripple__container {
+	display: none !important;
 }
 </style>
 

@@ -12,7 +12,6 @@
 <script>
 import RoomEmpty from '../components/RoomEmpty'
 import { db } from '@/firebase'
-import axios from 'axios'
 
 export default {
     name: 'Room',

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <img class="logo" src="../assets/hearth_logo_multicolor.png" />
-    <h1 class="title">Hearth</h1>
-    <div class="subtitle">Pull up a chair by the Hearth!</div>
+    <img class="logo-img" src="../assets/hearth_logo_multicolor.png" />
+    <h1 class="app-title">Hearth</h1>
+    <div class="app-subtitle">Pull up a chair by the Hearth!</div>
   </div>
 </template>
 
@@ -10,15 +10,15 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik:700');
 @import "../styles/variables.scss";
 
-.logo {
+.logo-img {
     display: block;
     margin: 0 auto;
-    height: 250px;
-    max-height: 25vh;
+    min-height: 250px;
+    max-height: 40vh;
     padding-top: 50px;
 }
 
-.title {
+.app-title {
     font-family: 'Rubik', sans-serif;
     font-weight: bold;
     text-transform: uppercase;
@@ -27,7 +27,7 @@
     margin-top: 10px;
 }
 
-.subtitle {
+.app-subtitle {
     font-family: 'Rubik', sans-serif;
     font-weight: bold;
     text-align: center;

@@ -1,9 +1,9 @@
 <template>
     <div>
         <homelogo></homelogo>
-        <form action="submit">
-            <input type="text" placeholder="Enter code" />
-            <button type="submit" class="btn btn-join">Join room</button>
+        <form class="form-join" @submit.prevent="joinRoom">
+            <input class="input-join" type="text" placeholder="Enter code" v-model="room"/>
+            <button type="submit" class="btn-join">Join room</button>
         </form>
         <img class="corner" src="../assets/corner.png" />
     </div>
@@ -14,23 +14,33 @@ import HomeLogo from '../components/HomeLogo'
 export default {
     components: {
         'homelogo': HomeLogo
+    },
+    data() {
+        return {
+            room: ''
+        }
+    },
+    methods: {
+        joinRoom() {
+            this.$router.push({ path: `/room/${this.room}` })
+        }
     }
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Rubik:700');
 @import "../styles/variables.scss";
 
-form {
+.form-join {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
 }
 
-input {
-    width: 276px;
+.input-join {
+    width: 300px;
     margin: 0;
     margin-bottom: 10px;
     padding: 10px;
@@ -40,9 +50,10 @@ input {
     font-weight: bold;
     color: $lightred;
     text-align: center;
+    background-color: white;
 }
 
-.btn {
+.btn-join {
     width: 300px;
     margin-bottom: 10px;
     padding: 10px;
@@ -51,14 +62,11 @@ input {
     font-size: 1.4rem;
     font-weight: bold;
     color: white;
+    background-color: $lightred;
 }
 
 .btn-create {
     background-color: $darkred;
-}
-
-.btn-join {
-    background-color: $lightred;
 }
 
 .corner {

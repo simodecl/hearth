@@ -2,7 +2,7 @@
     <div>
         <homelogo></homelogo>
         <div class="btns">
-            <button class="btn btn-create">Create room</button>
+            <button v-on:click="createRoom" class="btn btn-create">Create room</button>
             <router-link to="/join">
                 <button class="btn btn-join">Join room</button>
             </router-link>
@@ -13,10 +13,22 @@
 
 <script>
 import HomeLogo from '../components/HomeLogo'
+import axios from 'axios'
+
 export default {
     name: 'Home',
     components: {
         'homelogo': HomeLogo
+    },
+    methods: {
+        createRoom(){
+            axios.post('/api/v1/rooms').then((room) => {
+                this.joinRoom(room.data)
+            })
+        },
+        joinRoom(code) {
+            this.$router.push({ path: `/room/${code}` })
+        }
     }
 }
 </script>
