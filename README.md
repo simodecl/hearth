@@ -44,6 +44,7 @@ VUE_APP_FIREBASE_DOMAIN=database-13579.firebaseapp.com
 VUE_APP_FIREBASE_PROJECTID=database-13579
 VUE_APP_FIREBASE_BUCKET=database-13579.appspot.com
 VUE_APP_FIREBASE_SENDER=<firebase_sender_id>
+YOUTUBE_API_KEY=<youtube_api_key>
 ```
 
 ---
@@ -52,4 +53,9 @@ VUE_APP_FIREBASE_SENDER=<firebase_sender_id>
 ### Create a new room
 ```
 POST /api/v1/rooms
+```
+
+### Search YouTube videos
+```
+GET /api/v1/youtube/search?q=<search_query>
 ```

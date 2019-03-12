@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <component :is="layout">
-    	<router-view/>
-    </component>
+    	<router-view></router-view>
+		</component>
   </div>
 </template>
 
@@ -13,14 +13,6 @@ export default {
     layout() {
       return (this.$route.meta.layout || default_layout) + "-layout";
     }
-  },
-  created() {
-    // nothing defined here (when this.$route.path is other than "/")
-    console.log(this.$route, this.$route.meta.layout);
-  },
-  updated() {
-    // something defined here whatever the this.$route.path
-    console.log(this.$route, this.$route.meta.layout);
   }
 };
 </script>
@@ -66,6 +58,7 @@ body {
 }
 ol, ul {
 	list-style: none;
+	padding-left: 0px !important;
 }
 blockquote, q {
 	quotes: none;
@@ -86,7 +79,6 @@ table {
 @import "./styles/variables.scss";
 
 #app {
-	height: 100%;
 	min-height: 100%;
 	background-color: $darkgrey;
 	color: white;

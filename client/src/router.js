@@ -4,6 +4,9 @@ import Home from './views/Home.vue'
 import Join from './views/Join.vue'
 import Room from './views/Room.vue'
 import AppHome from './views/AppHome.vue'
+import YoutubeSearch from './views/YoutubeSearch.vue'
+import YoutubePlaylist from './views/YoutubePlaylist.vue'
+import YoutubeHistory from './views/YoutubeHistory.vue'
 
 Vue.use(Router)
 
@@ -35,7 +38,24 @@ export default new Router({
 		path: "/app/room/:roomid/youtube",
 		name: "AppYoutube",
 		meta: { layout: "navbars" },
-		component: require("./views/AppYoutube.vue").default
+		component: require("./views/AppYoutube.vue").default,
+		children: [
+			{
+				path: '',
+				meta: { layout: "navbars" },
+				component: YoutubeSearch
+			},
+			{
+				path: 'playlist',
+				meta: { layout: "navbars" },
+				component: YoutubePlaylist
+			},
+			{
+				path: 'history',
+				meta: { layout: "navbars" },
+				component: YoutubeHistory
+			}
+		]
 	},
 	{
 		path: "/app/room/:roomid/spotify",

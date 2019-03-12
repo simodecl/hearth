@@ -23,6 +23,7 @@
 
         </v-toolbar>
             <slot />
+        <div class="spacer"></div>
         <v-bottom-nav class="tabnav" :class="{ 'push-bottomnav': drawer }" :value="true" absolute>
             <v-btn :to="`/app/room/${this.$route.params.roomid}/youtube`">
                 <span>Youtube</span>
@@ -62,6 +63,10 @@
 
 <style lang="scss" scoped>
 @import "../styles/variables.scss";
+
+.spacer {
+    height:70px;
+}
 
 .toolbar {
     background-color: $grey !important;

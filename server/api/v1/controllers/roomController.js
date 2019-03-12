@@ -11,7 +11,7 @@ exports.create_room = (req, res, next) => {
     if (newRoom) {
         return res.json(random)
     } else {
-        return errorHandler.handleAPIError(505, 'Could not create a new room', next)
+        return errorHandler.handleAPIError(505, 'There was a problem trying to create room', next)
     }
 }
 
@@ -36,6 +36,6 @@ exports.join_room = (req, res, next) => {
             }
         })
         .catch(err => {
-            return errorHandler.handleAPIError(505, err || 'Could not join room', next)
-        });
+            return errorHandler.handleAPIError(505, err || 'There was a problem trying to join room', next)
+        })
 }
