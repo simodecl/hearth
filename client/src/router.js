@@ -4,6 +4,9 @@ import Home from './views/Home.vue'
 import Join from './views/Join.vue'
 import Room from './views/Room.vue'
 import AppHome from './views/AppHome.vue'
+import AppYoutube from './views/AppYoutube.vue'
+import AppSpotify from './views/AppSpotify.vue'
+import AppImages from './views/AppImages.vue'
 import YoutubeSearch from './views/YoutubeSearch.vue'
 import YoutubePlaylist from './views/YoutubePlaylist.vue'
 import YoutubeHistory from './views/YoutubeHistory.vue'
@@ -38,7 +41,7 @@ export default new Router({
 		path: "/app/room/:roomid/youtube",
 		name: "AppYoutube",
 		meta: { layout: "navbars" },
-		component: require("./views/AppYoutube.vue").default,
+		component: AppYoutube,
 		children: [
 			{
 				path: '',
@@ -61,13 +64,13 @@ export default new Router({
 		path: "/app/room/:roomid/spotify",
 		name: "AppSpotify",
 		meta: { layout: "navbars" },
-		component: require("./views/AppSpotify.vue").default
+		component: AppSpotify
 	},
 	{
 		path: "/app/room/:roomid/images",
 		name: "AppImages",
 		meta: { layout: "navbars" },
-		component: require("./views/AppImages.vue").default
+		component: AppImages
 	},
   ]
 })

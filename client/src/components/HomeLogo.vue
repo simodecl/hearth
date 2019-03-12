@@ -7,8 +7,6 @@
 </template>
 
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Rubik:700');
-@import "../styles/variables.scss";
 
 .logo-img {
     display: block;

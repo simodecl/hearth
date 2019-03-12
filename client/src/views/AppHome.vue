@@ -18,8 +18,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Rubik:700');
-@import "../styles/variables.scss";
 
 form {
     display: flex;

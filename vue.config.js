@@ -24,5 +24,12 @@ module.exports = {
                 changeOrigin: true
             }
         }
-     }  
+     },
+     css: {
+        loaderOptions: {
+            sass: {
+                data: '@import "./client/src/assets/scss/global.scss";'
+            }
+        }
+    }  
 }

@@ -62,7 +62,6 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/variables.scss";
 
 .spacer {
     height:70px;
@@ -112,12 +111,13 @@
     height: 56px;
 }
 
-.nav-list-item .v-icon {
-    font-size: 30px !important;
-}
-
 .v-icon {
     color: white !important;
+    font-size: 24px !important;
+}
+
+.nav-list-item .v-icon {
+    font-size: 30px !important;
 }
 
 .logo {
@@ -144,11 +144,11 @@
     border-color: $lightgrey !important;
 }
 
-.drawer-open {
-    margin-left: 80px;
-}
+// .drawer-open {
+//     margin-left: 80px;
+// }
 
-.push-bottomnav {
-    left: 80px !important;
-}
+// .push-bottomnav {
+//     left: 80px !important;
+// }
 </style>
