@@ -6,7 +6,11 @@ exports.create_room = (req, res, next) => {
     const random = Math.floor(1000 + Math.random() * 9000)
     const newRoom = db.collection('rooms').doc(random.toString()).set({
         code: random,
-        connections: []
+        connections: [],
+        youtube_playlist: [],
+        youtube_history: [],
+        spotify_playlist: [],
+        spotify_history: [],
     })
     if (newRoom) {
         return res.json(random)

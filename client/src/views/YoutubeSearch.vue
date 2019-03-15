@@ -16,6 +16,11 @@
                     <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
                     <div class="channel">{{ result.snippet.channelTitle }}</div>
                 </div>
+                <div class="actions">
+                    <v-icon class="red-color" v-if="inPlaylist(result.id.videoId)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
+                    <v-icon v-if="!inPlaylist(result.id.videoId)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
+                    <v-icon>star_border</v-icon>
+                </div>
             </li>
         </ul>
 
@@ -25,9 +30,9 @@
 <script>
 // import YoutubeResult from '../components/YoutubeResult'
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
-    name: 'Room',
     components: {
         // 'youtube-result': YoutubeResult
     },
@@ -35,29 +40,49 @@ export default {
         return {
             results: [],
             searchQuery: '',
-            volume: '',
             loading: false,
-            active: -1,
-            videoTitle: 'No video playing',
-            duration: '0:00',
-            progress: '0:00'
 
         }
     },
     computed: {
-        
+        playlist() {
+            console.log(this.$store.getters['playlist'])
+            return this.$store.getters['playlist']
+        },
+        inPlaylist() {
+            return (id) => {
+                const filtered = this.playlist.filter(vid => vid.id.videoId === id)
+                return filtered.length === 1
+            }
+        },
     },
     created() {
-      
+        
     },
     methods: {
+        ...mapActions([
+        'UPDATE_YOUTUBE_PLAYLIST'
+        ]),
         async getVideos() {
             this.active = -1
             this.loading = true
             const response = await axios.get(`/api/v1/youtube/search?q=${this.searchQuery}`)
             this.results = response.data
             this.loading = false
+        },
+        addToPlaylist(video) {
+            this.UPDATE_YOUTUBE_PLAYLIST({ 
+                video: video, 
+                action: 'add',
+            })
+        },
+        removeFromPlaylist(video) {
+            this.UPDATE_YOUTUBE_PLAYLIST({ 
+                video: video, 
+                action: 'delete',
+            })
         }
+
     }
 }
 </script>
@@ -106,5 +131,21 @@ export default {
 
 .channel {
     color: $lightgrey;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+}
+
+.actions .v-icon {
+    color: white;
+    font-size: 24px;
+}
+
+.actions .red-color {
+    color: $lightred;
 }
 </style>

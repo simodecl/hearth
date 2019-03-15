@@ -45,7 +45,10 @@
 </template>
 
 <script>
-  export default {
+import { mapMutations } from 'vuex'
+import { db } from '@/firebase'
+
+export default {
     name: 'Navbars',
     data () {
         return {
@@ -57,8 +60,31 @@
                 { title: 'Favourites', icon: 'star' },
             ]
         }
+    },
+    computed: {
+        state () {
+            return this.$store.state
+        }
+    },
+    created() {
+        this.SET_ROOM(this.$route.params.roomid)
+        this.getYoutubePlaylist(this.state.room)
+    },
+    methods: {
+        ...mapMutations([
+        'SET_ROOM',
+        'GET_YOUTUBE_PLAYLIST'
+        ]),
+        getYoutubePlaylist(roomcode) {
+            db.collection("rooms").doc(roomcode)
+                .onSnapshot((room) => {
+                    this.GET_YOUTUBE_PLAYLIST(room.data().youtube_playlist)
+                    console.log(this.state)
+                })
+        }
+
     }
-  }
+}
 </script>
 
 <style lang="scss" scoped>

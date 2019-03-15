@@ -14,4 +14,6 @@ const config = {
 
 Vue.use(VueFire)
 firebase.initializeApp(config)
+
+export const fb = firebase
 export const db = firebase.firestore()
