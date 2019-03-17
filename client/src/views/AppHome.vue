@@ -27,7 +27,7 @@ form {
 }
 
 input {
-    width: 276px;
+    width: 300px;
     margin: 0;
     margin-bottom: 10px;
     padding: 10px;

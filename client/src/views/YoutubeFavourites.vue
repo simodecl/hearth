@@ -1,11 +1,5 @@
 <template>
     <div class="main">
-        <form class="search"  v-on:submit.prevent="getVideos">
-            <input type="text" placeholder="Search videos" v-model="searchQuery">
-            <button type="submit">
-                <v-icon>search</v-icon>
-            </button>
-        </form>
         <div v-if="loading">
             <p class="loading">css spinner emoji</p>
         </div>
@@ -30,7 +24,6 @@
 
 <script>
 // import YoutubeResult from '../components/YoutubeResult'
-import axios from 'axios'
 import { mapActions } from 'vuex'
 
 export default {
@@ -78,17 +71,17 @@ export default {
         },
     },
     created() {
-        
+        this.getVideos()
     },
     methods: {
         ...mapActions([
         'UPDATE_YOUTUBE_PLAYLIST'
         ]),
-        async getVideos() {
+        getVideos() {
             this.active = -1
             this.loading = true
-            const response = await axios.get(`/api/v1/youtube/search?q=${this.searchQuery}`)
-            this.results = response.data
+            const vids = JSON.parse(localStorage.getItem('videos'))
+            this.results = vids
             this.loading = false
         },
         addToPlaylist(video) {
@@ -113,9 +106,13 @@ export default {
                 this.favs.splice(i,1);
                 break;
             }
+            for (let i =0; i < this.results.length; i++)
+            if (this.results[i].id.videoId === video.id.videoId) {
+                this.results.splice(i,1);
+                break;
+            }
             localStorage.setItem('videos', JSON.stringify(this.favs))
         }
-
     }
 }
 </script>

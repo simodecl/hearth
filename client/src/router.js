@@ -10,6 +10,7 @@ import AppImages from './views/AppImages.vue'
 import YoutubeSearch from './views/YoutubeSearch.vue'
 import YoutubePlaylist from './views/YoutubePlaylist.vue'
 import YoutubeHistory from './views/YoutubeHistory.vue'
+import YoutubeFavourites from './views/YoutubeFavourites.vue'
 
 Vue.use(Router)
 
@@ -57,6 +58,11 @@ export default new Router({
 				path: 'history',
 				meta: { layout: "navbars" },
 				component: YoutubeHistory
+			},
+			{
+				path: 'favourites',
+				meta: { layout: "navbars" },
+				component: YoutubeFavourites
 			}
 		]
 	},
