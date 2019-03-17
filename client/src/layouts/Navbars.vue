@@ -5,10 +5,10 @@
             <img class="logo" src="../assets/hearth_logo_multicolor.png" />
         </div>
         <div class="nav-list">
-          <div class="nav-list-item" v-for="item in items" :key="item.title">
+          <router-link class="nav-list-item" v-for="item in items" :key="item.title" :to="`/app/room/${$route.params.roomid}/${item.link}`">
             <v-icon>{{ item.icon }}</v-icon>
             <div>{{ item.title }}</div>
-          </div>
+          </router-link>
         </div>
         <div class="nav-exit">
           <v-icon>exit_to_app</v-icon>
@@ -22,7 +22,7 @@
             <v-toolbar-title class="white--text">Title</v-toolbar-title>
 
         </v-toolbar>
-            <slot />
+            <slot/>
         <div class="spacer"></div>
         <v-bottom-nav class="tabnav" :class="{ 'push-bottomnav': drawer }" :value="true" absolute>
             <v-btn :to="`/app/room/${this.$route.params.roomid}/youtube`">
@@ -53,12 +53,7 @@ export default {
     data () {
         return {
             drawer: null,
-            items: [
-                { title: 'Search', icon: 'search' },
-                { title: 'Playlist', icon: 'playlist_play' },
-                { title: 'History', icon: 'history' },
-                { title: 'Favourites', icon: 'star' },
-            ]
+            items: []
         }
     },
     computed: {
@@ -75,6 +70,10 @@ export default {
         'SET_ROOM',
         'GET_YOUTUBE_PLAYLIST'
         ]),
+        setNav(items) {
+            this.items = items
+            console.log(items)
+        },
         getYoutubePlaylist(roomcode) {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
@@ -127,6 +126,12 @@ export default {
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+}
+
+.nav-list-item div {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
 }
 
 .nav-exit {
