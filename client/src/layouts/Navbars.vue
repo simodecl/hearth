@@ -126,6 +126,7 @@ export default {
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+    text-decoration: none;
 }
 
 .nav-list-item div {
