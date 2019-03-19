@@ -22,6 +22,7 @@ const routes = require('./server/config/routes')
 Socket.io
 */
 const views = {}
+const appviews = {}
 
 io.on('connection', (socket) => {
     socket.on('tv connect', (roomcode) => {
@@ -30,11 +31,25 @@ io.on('connection', (socket) => {
         views[socket.id].room = roomcode
         RoomManager.join(views[socket.id].room, socket.id)
     })
+    socket.on('app connect', () => {
+        console.log('An app user connected')
+        appviews[socket.id] = socket
+    })
+    socket.on('updateyt', (data) => {
+        for(let id in appviews) {
+            const appview = appviews[id]
+            appview.emit('updateyt', data)
+        }
+    })
     socket.on('disconnect', () => {
         if(views[socket.id]) {
             console.log('A TV disconnected')
             RoomManager.leave(views[socket.id].room, socket.id)
             delete views[socket.id]
+        }
+        if(appviews[socket.id]) {
+            console.log('An app user disconnected')
+            delete appviews[socket.id]
         }
     })
 })

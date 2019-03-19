@@ -64,6 +64,7 @@ export default {
     created() {
         this.SET_ROOM(this.$route.params.roomid)
         this.getYoutubePlaylist(this.state.room)
+        this.$socket.emit('app connect')
     },
     methods: {
         ...mapMutations([

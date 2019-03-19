@@ -31,7 +31,6 @@
 <script>
 // import YoutubeResult from '../components/YoutubeResult'
 import axios from 'axios'
-import { mapActions } from 'vuex'
 
 export default {
     components: {
@@ -81,9 +80,6 @@ export default {
         
     },
     methods: {
-        ...mapActions([
-        'UPDATE_YOUTUBE_PLAYLIST'
-        ]),
         async getVideos() {
             this.active = -1
             this.loading = true
@@ -92,16 +88,13 @@ export default {
             this.loading = false
         },
         addToPlaylist(video) {
-            this.UPDATE_YOUTUBE_PLAYLIST({ 
+            this.$store.dispatch('ADD_TO_YOUTUBE_PLAYLIST',{ 
                 video: video, 
-                action: 'add',
+                id: this.$socket.io.engine.id
             })
         },
         removeFromPlaylist(video) {
-            this.UPDATE_YOUTUBE_PLAYLIST({ 
-                video: video, 
-                action: 'delete',
-            })
+            this.$store.dispatch('REMOVE_FROM_YOUTUBE_PLAYLIST', video)
         },
         addToFavourites(video) {
             this.favs.push(video)

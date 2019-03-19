@@ -88,12 +88,14 @@ export default {
             this.UPDATE_YOUTUBE_PLAYLIST({ 
                 video: video, 
                 action: 'add',
+                id: this.$socket.io.engine.id
             })
         },
         removeFromPlaylist(video) {
             this.UPDATE_YOUTUBE_PLAYLIST({ 
                 video: video, 
                 action: 'delete',
+                id: this.$socket.io.engine.id
             })
         },
         addToFavourites(video) {

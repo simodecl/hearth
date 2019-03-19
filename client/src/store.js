@@ -26,25 +26,27 @@ export default new Vuex.Store({
     [GET_YOUTUBE_PLAYLIST](state, videos) {
       state.youtube.playlist = []
       state.youtube.playlist.push(...videos)
-    },
-    // [UPDATE_YOUTUBE_PLAYLIST](state, video) {
-    //   state.youtube.playlist.push(video)
-    // },
+    }
     
   },
   actions: {
-    UPDATE_YOUTUBE_PLAYLIST({ state }, {video, action}) {
+    ADD_TO_YOUTUBE_PLAYLIST({ state }, {video, id}) {
       const room = db.collection('rooms').doc(state.room)
-      if (action === 'add') {
-        room.update({
-          youtube_playlist: fb.firestore.FieldValue.arrayUnion(video)
-        })
-      }
-      if (action === 'delete') {
-        room.update({
-          youtube_playlist: fb.firestore.FieldValue.arrayRemove(video)
-        })
-      }
+      room.update({
+        youtube_playlist: fb.firestore.FieldValue.arrayUnion(video)
+      })
+    },
+    REMOVE_FROM_YOUTUBE_PLAYLIST({ state }, video) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        youtube_playlist: fb.firestore.FieldValue.arrayRemove(video)
+      })
+    },
+    UPDATE_YOUTUBE_PLAYLIST({ state }, playlist) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        youtube_playlist: playlist
+      })
     }
   },
   getters: {
