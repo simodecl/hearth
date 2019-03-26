@@ -35,11 +35,13 @@ io.on('connection', (socket) => {
         console.log('An app user connected')
         appviews[socket.id] = socket
     })
-    socket.on('updateyt', (data) => {
-        for(let id in appviews) {
-            const appview = appviews[id]
-            appview.emit('updateyt', data)
+    socket.on('playVideo', (data) => {
+        for(let id in views) {
+            console.log('play video')
+            const view = views[id]
+            view.emit('playVideo', data)
         }
+ 
     })
     socket.on('disconnect', () => {
         if(views[socket.id]) {

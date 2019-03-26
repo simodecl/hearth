@@ -69,7 +69,7 @@ export default {
     methods: {
         ...mapMutations([
         'SET_ROOM',
-        'GET_YOUTUBE_PLAYLIST'
+        'GET_DB_CHANGE'
         ]),
         setNav(items) {
             this.items = items
@@ -78,7 +78,7 @@ export default {
         getYoutubePlaylist(roomcode) {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
-                    this.GET_YOUTUBE_PLAYLIST(room.data().youtube_playlist)
+                    this.GET_DB_CHANGE(room.data())
                     console.log(this.state)
                 })
         }

@@ -7,8 +7,10 @@ exports.create_room = (req, res, next) => {
     const newRoom = db.collection('rooms').doc(random.toString()).set({
         code: random,
         connections: [],
+        youtube_now: {},
         youtube_playlist: [],
         youtube_history: [],
+        spotify_now: {},
         spotify_playlist: [],
         spotify_history: [],
     })

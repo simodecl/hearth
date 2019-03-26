@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { SET_ROOM, SET_ACTIVE, GET_YOUTUBE_PLAYLIST } from './mutation-types'
+import { SET_ROOM, GET_DB_CHANGE } from './mutation-types'
 import { fb, db } from '@/firebase'
 
 Vue.use(Vuex)
@@ -10,12 +10,12 @@ export default new Vuex.Store({
     room: '',
     active: null,
     youtube: {
-      current: {},
+      current: null,
       playlist: [],
       history: []
     },
     spotify: {
-      current: {},
+      current: null,
       playlist: [],
       history: []
     }
@@ -24,12 +24,13 @@ export default new Vuex.Store({
     [SET_ROOM](state, room) {
       state.room = room
     },
-    [SET_ACTIVE](state, mode) {
-      state.active = mode
-    },
-    [GET_YOUTUBE_PLAYLIST](state, videos) {
+    [GET_DB_CHANGE](state, data) {
+      state.active = data.active
+      state.youtube.current = data.youtube_current
       state.youtube.playlist = []
-      state.youtube.playlist.push(...videos)
+      state.youtube.playlist.push(...data.youtube_playlist)
+      state.youtube.history = []
+      state.youtube.history.push(...data.youtube_history)
     }
     
   },

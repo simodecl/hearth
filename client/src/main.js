@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueSocketIO from 'vue-socket.io'
+import VueYoutube from 'vue-youtube'
 import './firebase'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -25,6 +26,7 @@ Vue.use(new VueSocketIO({
   debug: true,
   connection: 'localhost:8000'
 }))
+Vue.use(VueYoutube)
 
 new Vue({
   router,

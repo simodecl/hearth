@@ -1,5 +1,6 @@
 <template>
     <div class="main">
+        <v-icon class="play-arrow" v-on:click="play(playlist[0].id.videoId)">play_arrow</v-icon>
         <draggable v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(vid, i) of playlist" :key="i">
@@ -89,6 +90,9 @@ export default {
                 break;
             }
             localStorage.setItem('videos', JSON.stringify(this.favs))
+        },
+        play(id) {
+            this.$socket.emit('playVideo', id)
         }
     }
 }
@@ -165,5 +169,10 @@ export default {
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
+}
+
+.play-arrow {
+    color: white !important;
+    font-size: 30px;
 }
 </style>

@@ -60,17 +60,14 @@ export default {
                         this.$store.dispatch('SET_ACTIVE', 'youtube')
                     }
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(() => {
                     this.exists = false
                 })
         },
         listenForDbChanges(roomcode) {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
-                    this.$store.commit('GET_YOUTUBE_PLAYLIST', room.data().youtube_playlist)
-                    this.$store.commit('SET_ACTIVE', room.data().active)
-                    console.log(this.state)
+                    this.$store.commit('GET_DB_CHANGE', room.data())
                 })
         }
     }
