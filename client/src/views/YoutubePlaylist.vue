@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <v-icon class="play-arrow" v-on:click="play(playlist[0].id.videoId)">play_arrow</v-icon>
+        <v-icon class="play-arrow" v-on:click="play()">play_arrow</v-icon>
         <draggable v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(vid, i) of playlist" :key="i">
@@ -46,8 +46,8 @@ export default {
         }
     },
     computed: {
-        socketId() {
-            return this.$socket.io.engine.id
+        currentVideo() {
+            return this.$store.getters['currentVideo']
         },
         playlist: {
             set(playlist) {
@@ -91,8 +91,8 @@ export default {
             }
             localStorage.setItem('videos', JSON.stringify(this.favs))
         },
-        play(id) {
-            this.$socket.emit('playVideo', id)
+        play() {
+            this.$store.dispatch('PLAY_VIDEO')
         }
     }
 }

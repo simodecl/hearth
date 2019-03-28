@@ -88,10 +88,7 @@ export default {
             this.loading = false
         },
         addToPlaylist(video) {
-            this.$store.dispatch('ADD_TO_YOUTUBE_PLAYLIST',{ 
-                video: video, 
-                id: this.$socket.io.engine.id
-            })
+            this.$store.dispatch('ADD_TO_YOUTUBE_PLAYLIST', video)
         },
         removeFromPlaylist(video) {
             this.$store.dispatch('REMOVE_FROM_YOUTUBE_PLAYLIST', video)

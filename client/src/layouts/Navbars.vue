@@ -63,7 +63,7 @@ export default {
     },
     created() {
         this.SET_ROOM(this.$route.params.roomid)
-        this.getYoutubePlaylist(this.state.room)
+        this.getState(this.state.room)
         this.$socket.emit('app connect')
     },
     methods: {
@@ -75,7 +75,7 @@ export default {
             this.items = items
             console.log(items)
         },
-        getYoutubePlaylist(roomcode) {
+        getState(roomcode) {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
                     this.GET_DB_CHANGE(room.data())

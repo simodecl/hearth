@@ -19,11 +19,18 @@ export default {
     computed: {
         player () {
             return this.$refs.youtube.player
-        }
+        },
+        playlist () {
+            return this.$store.getters['playlist']
+        },
+        currentVideo() {
+            return this.$store.getters['currentVideo']
+        },
     },
     methods: {
         play(videoId) {
             this.video = videoId
+            console.log(this.player)
             this.player.playVideo
         },
         playing() {
@@ -38,6 +45,7 @@ export default {
             }, 1000)
         },
         playNext(){
+            this.$store.dispatch('PLAY_NEXT_VIDEO')
         },
     },
     sockets: {
@@ -51,8 +59,8 @@ export default {
 <style lang="scss">
 
 .main-yt {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 
 </style>
