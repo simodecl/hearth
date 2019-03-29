@@ -106,6 +106,9 @@ export default new Vuex.Store({
     playlist(state) {
       return state.youtube.playlist
     },
+    history(state) {
+      return state.youtube.history
+    },
     currentVideo(state) {
       return state.youtube.current
     },
