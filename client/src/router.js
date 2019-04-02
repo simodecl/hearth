@@ -11,6 +11,10 @@ import YoutubeSearch from './views/YoutubeSearch.vue'
 import YoutubePlaylist from './views/YoutubePlaylist.vue'
 import YoutubeHistory from './views/YoutubeHistory.vue'
 import YoutubeFavourites from './views/YoutubeFavourites.vue'
+import SpotifySearch from './views/SpotifySearch.vue'
+import SpotifyPlaylist from './views/SpotifyPlaylist.vue'
+import SpotifyHistory from './views/SpotifyHistory.vue'
+import SpotifyFavourites from './views/SpotifyFavourites.vue'
 
 Vue.use(Router)
 
@@ -70,7 +74,29 @@ export default new Router({
 		path: "/app/room/:roomid/spotify",
 		name: "AppSpotify",
 		meta: { layout: "navbars" },
-		component: AppSpotify
+		component: AppSpotify,
+		children: [
+			{
+				path: '',
+				meta: { layout: "navbars" },
+				component: SpotifySearch
+			},
+			{
+				path: 'playlist',
+				meta: { layout: "navbars" },
+				component: SpotifyPlaylist
+			},
+			{
+				path: 'history',
+				meta: { layout: "navbars" },
+				component: SpotifyHistory
+			},
+			{
+				path: 'favourites',
+				meta: { layout: "navbars" },
+				component: SpotifyFavourites
+			}
+		]
 	},
 	{
 		path: "/app/room/:roomid/images",

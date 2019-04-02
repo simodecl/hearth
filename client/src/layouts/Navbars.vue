@@ -73,7 +73,6 @@ export default {
         ]),
         setNav(items) {
             this.items = items
-            console.log(items)
         },
         getState(roomcode) {
             db.collection("rooms").doc(roomcode)

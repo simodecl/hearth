@@ -17,7 +17,6 @@ Custom Routes
 */
 const routes = require('./server/config/routes')
 
-
 /*
 Socket.io
 */

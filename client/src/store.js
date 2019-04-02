@@ -17,7 +17,8 @@ export default new Vuex.Store({
     spotify: {
       current: null,
       playlist: [],
-      history: []
+      history: [],
+      token: null
     }
   },
   mutations: {
@@ -25,12 +26,10 @@ export default new Vuex.Store({
       state.room = room
     },
     [GET_DB_CHANGE](state, data) {
-      console.log(data)
       state.active = data.active
       state.youtube.current = data.youtube_now
       data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
       data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
-      console.log(state)
     }
     
   },
@@ -61,17 +60,14 @@ export default new Vuex.Store({
     },
     PLAY_VIDEO({ state }) {
       const room = db.collection('rooms').doc(state.room)
-      console.log(state)
       const playlist = state.youtube.playlist
       const current = state.youtube.current
       let history = state.youtube.history
       const newCurrent = playlist[0]
       const newPlaylist = playlist.splice(1)
-      console.log(newCurrent)
       if (current) {
 
         history.length > 0 ? history.push(current) : history = [current]
-        console.log(history)
         room.update({
           youtube_history: history,
         })
@@ -114,6 +110,9 @@ export default new Vuex.Store({
     },
     active(state) {
       return state.active
+    },
+    spotifyToken(state) {
+      return state.spotify.token
     }
   }
 })
