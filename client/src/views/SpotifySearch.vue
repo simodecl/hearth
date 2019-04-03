@@ -1,11 +1,30 @@
 <template>
     <div class="main">
-        <div v-if="spotifyToken">
-            {{spotifyToken}}
+        <form class="search"  v-on:submit.prevent="getVideos">
+            <input type="text" placeholder="Search songs" v-model="searchQuery">
+            <button type="submit">
+                <v-icon>search</v-icon>
+            </button>
+        </form>
+        <div v-if="loading">
+            <p class="loading">css spinner emoji</p>
         </div>
-        <div v-else>
-            <button @click="login()">Login with spotify</button>
-        </div>
+        <ul id="results" v-else>
+            <li class="result" v-for="(result, i) of results" :key="i">
+                <img class="thumbnail" :src="result.album.images[1].url">
+                <div class="details">
+                    <div class="title">{{ result.name > 50 ? result.name.substring(0,50) + "..." : result.name }}</div>
+                    <div class="channel">{{ result.artists[0].name }}</div>
+                </div>
+                <div class="actions">
+                    <v-icon class="red-color" v-if="inPlaylist(result.id)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
+                    <v-icon v-if="!inPlaylist(result.id)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
+                    <v-icon class="red-color" v-if="isFavourite(result.id)" v-on:click="removeFromFavourites(result)">star</v-icon>
+                    <v-icon v-if="!isFavourite(result.id)" v-on:click="addToFavourites(result)">star_border</v-icon>
+                </div>
+            </li>
+        </ul>
+
     </div>
 </template>
 
@@ -15,6 +34,10 @@ import axios from 'axios'
 export default {
     data() {
         return {
+            results: [],
+            searchQuery: '',
+            loading: false,
+            favs: []
 
         }
     },
@@ -28,20 +51,55 @@ export default {
         }
     },
     computed: {
-        spotifyToken() {
-            return this.$store.getters['spotifyToken']
-        }
+        playlist() {
+            return this.$store.getters['spotifyPlaylist']
+        },
+        inPlaylist() {
+            return (id) => {
+                const filtered = this.playlist.filter(vid => vid.id === id)
+                return filtered.length === 1
+            }
+        },
+        isFavourite() {
+            return (id) => {
+                if (this.favs) {
+                    const filtered = this.favs.filter(vid => vid.id === id)
+                    return filtered.length === 1
+                } else {
+                    return false
+                }
+                
+            }
+        },
     },
     created() {
         
     },
     methods: {
-        login() {
-            console.log('yeet')
-            axios.get('/api/v1/auth/spotify').then(() => {
-                console.log('Worked')
-            })
-            console.log('yote')
+        async getVideos() {
+            this.active = -1
+            this.loading = true
+            const response = await axios.get(`/api/v1/spotify/search?q=${this.searchQuery}`)
+            this.results = response.data
+            this.loading = false
+        },
+        addToPlaylist(video) {
+            this.$store.dispatch('ADD_TO_SPOTIFY_PLAYLIST', video)
+        },
+        removeFromPlaylist(video) {
+            this.$store.dispatch('REMOVE_FROM_SPOTIFY_PLAYLIST', video)
+        },
+        addToFavourites(video) {
+            this.favs.push(video)
+            localStorage.setItem('songs', JSON.stringify(this.favs))
+        },
+        removeFromFavourites(video) {
+            for (let i =0; i < this.favs.length; i++)
+            if (this.favs[i].id === video.id) {
+                this.favs.splice(i,1);
+                break;
+            }
+            localStorage.setItem('songs', JSON.stringify(this.favs))
         }
 
     }
@@ -49,5 +107,71 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+.main {
+    margin: 20px;
+}
+
+.search {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 25px;
+}
+
+.search input {
+    border-bottom: solid 2px $lightgrey;
+    text-align: left;
+    width: 95%;
+}
+
+.search .v-icon {
+    font-size: 30px;
+    color: white;
+}
+
+.result {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+    justify-content: space-between;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90px;
+    margin-left: 10px;
+    width: 100%;
+}
+
+.title {
+    font-size: 1.1rem !important;
+}
+
+.channel {
+    color: $lightgrey;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+}
+
+.actions .v-icon {
+    color: white;
+    font-size: 24px;
+}
+
+.actions .red-color {
+    color: $lightred;
+}
+
+.thumbnail {
+    height: 90px;
+}
 
 </style>

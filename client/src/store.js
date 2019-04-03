@@ -17,8 +17,7 @@ export default new Vuex.Store({
     spotify: {
       current: null,
       playlist: [],
-      history: [],
-      token: null
+      history: []
     }
   },
   mutations: {
@@ -30,6 +29,9 @@ export default new Vuex.Store({
       state.youtube.current = data.youtube_now
       data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
       data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
+      state.spotify.current = data.spotify_now
+      data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
+      data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
     }
     
   },
@@ -50,6 +52,24 @@ export default new Vuex.Store({
       const room = db.collection('rooms').doc(state.room)
       room.update({
         youtube_playlist: playlist
+      })
+    },
+    ADD_TO_SPOTIFY_PLAYLIST({ state }, song ) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_playlist: fb.firestore.FieldValue.arrayUnion(song)
+      })
+    },
+    REMOVE_FROM_SPOTIFY_PLAYLIST({ state }, song) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_playlist: fb.firestore.FieldValue.arrayRemove(song)
+      })
+    },
+    UPDATE_SPOTIFY_PLAYLIST({ state }, playlist) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_playlist: playlist
       })
     },
     SET_ACTIVE({ state }, mode) {
@@ -108,11 +128,17 @@ export default new Vuex.Store({
     currentVideo(state) {
       return state.youtube.current
     },
+    spotifyPlaylist(state) {
+      return state.spotify.playlist
+    },
+    spotifyHistory(state) {
+      return state.spotify.history
+    },
+    currentSong(state) {
+      return state.spotify.current
+    },
     active(state) {
       return state.active
-    },
-    spotifyToken(state) {
-      return state.spotify.token
     }
   }
 })
