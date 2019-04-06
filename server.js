@@ -4,6 +4,8 @@ Libraries
 require('dotenv').config()
 const express = require('express')
 const path = require('path')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const app = express()
 const server = require('http').createServer(app)
@@ -60,6 +62,8 @@ io.on('connection', (socket) => {
 Express.js settings
 */
 app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(cors())
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use('', routes)

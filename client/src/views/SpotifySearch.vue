@@ -56,14 +56,14 @@ export default {
         },
         inPlaylist() {
             return (id) => {
-                const filtered = this.playlist.filter(vid => vid.id === id)
+                const filtered = this.playlist.filter(song => song.id === id)
                 return filtered.length === 1
             }
         },
         isFavourite() {
             return (id) => {
                 if (this.favs) {
-                    const filtered = this.favs.filter(vid => vid.id === id)
+                    const filtered = this.favs.filter(song => song.id === id)
                     return filtered.length === 1
                 } else {
                     return false
@@ -83,25 +83,24 @@ export default {
             this.results = response.data
             this.loading = false
         },
-        addToPlaylist(video) {
-            this.$store.dispatch('ADD_TO_SPOTIFY_PLAYLIST', video)
+        addToPlaylist(song) {
+            this.$store.dispatch('ADD_TO_SPOTIFY_PLAYLIST', song)
         },
-        removeFromPlaylist(video) {
-            this.$store.dispatch('REMOVE_FROM_SPOTIFY_PLAYLIST', video)
+        removeFromPlaylist(song) {
+            this.$store.dispatch('REMOVE_FROM_SPOTIFY_PLAYLIST', song)
         },
-        addToFavourites(video) {
-            this.favs.push(video)
+        addToFavourites(song) {
+            this.favs.push(song)
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
-        removeFromFavourites(video) {
+        removeFromFavourites(song) {
             for (let i =0; i < this.favs.length; i++)
-            if (this.favs[i].id === video.id) {
+            if (this.favs[i].id === song.id) {
                 this.favs.splice(i,1);
                 break;
             }
             localStorage.setItem('songs', JSON.stringify(this.favs))
         }
-
     }
 }
 </script>

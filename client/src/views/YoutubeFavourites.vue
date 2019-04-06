@@ -74,9 +74,6 @@ export default {
         this.getVideos()
     },
     methods: {
-        ...mapActions([
-        'UPDATE_YOUTUBE_PLAYLIST'
-        ]),
         getVideos() {
             this.active = -1
             this.loading = true
@@ -85,18 +82,10 @@ export default {
             this.loading = false
         },
         addToPlaylist(video) {
-            this.UPDATE_YOUTUBE_PLAYLIST({ 
-                video: video, 
-                action: 'add',
-                id: this.$socket.io.engine.id
-            })
+            this.$store.dispatch('ADD_TO_YOUTUBE_PLAYLIST', video)
         },
         removeFromPlaylist(video) {
-            this.UPDATE_YOUTUBE_PLAYLIST({ 
-                video: video, 
-                action: 'delete',
-                id: this.$socket.io.engine.id
-            })
+            this.$store.dispatch('REMOVE_FROM_YOUTUBE_PLAYLIST', video)
         },
         addToFavourites(video) {
             this.favs.push(video)
