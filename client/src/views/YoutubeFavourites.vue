@@ -23,13 +23,7 @@
 </template>
 
 <script>
-// import YoutubeResult from '../components/YoutubeResult'
-import { mapActions } from 'vuex'
-
 export default {
-    components: {
-        // 'youtube-result': YoutubeResult
-    },
     data() {
         return {
             results: [],

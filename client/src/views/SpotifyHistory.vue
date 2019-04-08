@@ -1,17 +1,17 @@
 <template>
     <div class="main">
-        <ul id="results">
+        <ul id="results" v-if="history">
             <li class="result" v-for="(result, i) of history" :key="i">
-                <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
+                <img class="thumbnail" :src="result.album.images[1].url">
                 <div class="details">
                     <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
                     <div class="channel">{{ result.snippet.channelTitle }}</div>
                 </div>
                 <div class="actions">
-                    <v-icon class="red-color" v-if="inPlaylist(result.id.videoId)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
-                    <v-icon v-if="!inPlaylist(result.id.videoId)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
-                    <v-icon class="red-color" v-if="isFavourite(result.id.videoId)" v-on:click="removeFromFavourites(result)">star</v-icon>
-                    <v-icon v-if="!isFavourite(result.id.videoId)" v-on:click="addToFavourites(result)">star_border</v-icon>
+                    <v-icon class="red-color" v-if="inPlaylist(result.id)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
+                    <v-icon v-if="!inPlaylist(result.id)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
+                    <v-icon class="red-color" v-if="isFavourite(result.id)" v-on:click="removeFromFavourites(result)">star</v-icon>
+                    <v-icon v-if="!isFavourite(result.id)" v-on:click="addToFavourites(result)">star_border</v-icon>
                 </div>
             </li>
         </ul>

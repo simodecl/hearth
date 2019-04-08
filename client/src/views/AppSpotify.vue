@@ -1,7 +1,7 @@
 <template>
     <div>
-        <a href="/api/v1/spotify/login?room=6409" class="btn btn-login">Login with Spotify</a>
-        <!-- <router-view></router-view> -->
+        <router-view v-if="this.accessToken"></router-view>
+        <a v-else v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login">Login with Spotify</a>
     </div>
 </template>
 
@@ -11,6 +11,13 @@ import axios from 'axios'
 export default {
     created() {
         this.setNav()
+        this.setToken()
+        console.log(this.accessToken)
+    },
+    computed: {
+        accessToken() {
+            return this.$store.getters['accessToken']
+        }
     },
     methods: {
         setNav() {
@@ -26,6 +33,11 @@ export default {
                 console.log(token)
             })
         },
+        setToken() {
+            if (this.$route.query && !this.accessToken ) {
+                this.$store.dispatch('SET_TOKENS', this.$route.query)
+            }
+        }
     }
 }
 </script>

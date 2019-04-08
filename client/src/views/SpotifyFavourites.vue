@@ -1,14 +1,11 @@
 <template>
     <div class="main">
-        <div v-if="loading">
-            <p class="loading">css spinner emoji</p>
-        </div>
-        <ul id="results" v-else>
+        <ul id="results" v-if="results">
             <li class="result" v-for="(result, i) of results" :key="i">
-                <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
+                <img class="thumbnail" :src="result.album.images[1].url">
                 <div class="details">
-                    <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
-                    <div class="channel">{{ result.snippet.channelTitle }}</div>
+                    <div class="title">{{ result.name > 50 ? result.name.substring(0,50) + "..." : result.name }}</div>
+                    <div class="channel">{{ result.artists[0].name }}</div>
                 </div>
                 <div class="actions">
                     <v-icon class="red-color" v-if="inPlaylist(result.id)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
@@ -23,20 +20,11 @@
 </template>
 
 <script>
-// import YoutubeResult from '../components/YoutubeResult'
-import { mapActions } from 'vuex'
-
 export default {
-    components: {
-        // 'youtube-result': YoutubeResult
-    },
     data() {
         return {
             results: [],
-            searchQuery: '',
-            loading: false,
             favs: []
-
         }
     },
     mounted() {
@@ -50,7 +38,7 @@ export default {
     },
     computed: {
         playlist() {
-            return this.$store.getters['playlist']
+            return this.$store.getters['spotifyPlaylist']
         },
         inPlaylist() {
             return (id) => {
@@ -74,15 +62,9 @@ export default {
         this.getVideos()
     },
     methods: {
-        ...mapActions([
-        'UPDATE_YOUTUBE_PLAYLIST'
-        ]),
         getVideos() {
-            this.active = -1
-            this.loading = true
             const songs = JSON.parse(localStorage.getItem('songs'))
             this.results = songs
-            this.loading = false
         },
         addToPlaylist(song) {
             this.$store.dispatch('ADD_TO_SPOTIFY_PLAYLIST', song)
@@ -118,27 +100,11 @@ export default {
     margin: 20px;
 }
 
-.search {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 25px;
-}
-
-.search input {
-    border-bottom: solid 2px $lightgrey;
-    text-align: left;
-    width: 95%;
-}
-
-.search .v-icon {
-    font-size: 30px;
-    color: white;
-}
-
 .result {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
+    justify-content: space-between;
 }
 
 .details {
@@ -147,6 +113,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {
@@ -171,5 +138,9 @@ export default {
 
 .actions .red-color {
     color: $lightred;
+}
+
+.thumbnail {
+    height: 90px;
 }
 </style>

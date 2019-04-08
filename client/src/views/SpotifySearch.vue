@@ -79,8 +79,8 @@ export default {
         async getVideos() {
             this.active = -1
             this.loading = true
-            const response = await axios.get(`/api/v1/spotify/search?q=${this.searchQuery}`)
-            this.results = response.data
+            const response = await axios.get(`https://api.spotify.com/v1/search?q=${encodeURIComponent(this.searchQuery)}&type=track&limit=10`)
+            this.results = response.data.tracks.items
             this.loading = false
         },
         addToPlaylist(song) {

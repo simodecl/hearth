@@ -7,12 +7,12 @@ import VueYoutube from 'vue-youtube'
 import './firebase'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import Default from "./layouts/Default.vue";
-import Navbars from "./layouts/Navbars.vue";
+import Default from './layouts/Default.vue'
+import Navbars from './layouts/Navbars.vue'
+import interceptorSetup from './interceptors'
 
-Vue.component("default-layout", Default);
-Vue.component("navbars-layout", Navbars);
-
+Vue.component('default-layout', Default);
+Vue.component('navbars-layout', Navbars);
 
 Vue.config.productionTip = false
 
@@ -27,8 +27,9 @@ Vue.use(new VueSocketIO({
   connection: 'localhost:8000'
 }))
 Vue.use(VueYoutube)
-
+const int = interceptorSetup()
 new Vue({
+  int,
   router,
   store,
   render: h => h(App),

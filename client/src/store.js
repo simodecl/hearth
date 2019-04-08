@@ -17,7 +17,10 @@ export default new Vuex.Store({
     spotify: {
       current: null,
       playlist: [],
-      history: []
+      history: [],
+      access_token: null,
+      refresh_token: null,
+      expires_in: null
     }
   },
   mutations: {
@@ -32,6 +35,9 @@ export default new Vuex.Store({
       state.spotify.current = data.spotify_now
       data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
       data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
+      data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = ''
+      data.spotify_refresh_token ? state.spotify.refresh_token = data.spotify_refresh_token : state.spotify.refresh_token = ''
+      data.spotify_expires_in ? state.spotify.expires_in = data.spotify_expires_in : state.spotify.expires_in = ''
     }
     
   },
@@ -117,6 +123,28 @@ export default new Vuex.Store({
 
       this._vm.$socket.emit('playVideo', newCurrent.id.videoId)
     },
+    SET_TOKENS({ state }, query) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_access_token: query.access_token,
+        spotify_refresh_token: query.refresh_token,
+        spotify_expires_in: query.expires_in
+      })
+    },
+    SET_ACCESS_TOKEN({ state }, token) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_access_token:token
+      })
+    },
+    DELETE_TOKENS({ state }) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_access_token: '',
+        spotify_refresh_token: '',
+        spotify_expires_in: ''
+      })
+    },
   },
   getters: {
     playlist(state) {
@@ -139,6 +167,9 @@ export default new Vuex.Store({
     },
     active(state) {
       return state.active
+    },
+    accessToken(state) {
+      return state.spotify.access_token
     }
   }
 })

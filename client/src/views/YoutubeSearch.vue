@@ -138,6 +138,7 @@ export default {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
+    justify-content: space-between;
 }
 
 .details {
@@ -146,6 +147,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {

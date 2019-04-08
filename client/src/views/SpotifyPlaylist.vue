@@ -4,10 +4,10 @@
         <draggable v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(song, i) of playlist" :key="i">
-                    <img class="thumbnail" :src="song.snippet.thumbnails.default.url">
+                    <img class="thumbnail" :src="song.album.images[1].url">
                     <div class="details">
-                        <div class="title">{{ song.snippet.title.length > 50 ? song.snippet.title.substring(0,50) + "..." : song.snippet.title }}</div>
-                        <div class="channel">{{ song.snippet.channelTitle }}</div>
+                        <div class="title">{{ song.name.length > 50 ? song.name.substring(0,50) + "..." : song.name }}</div>
+                        <div class="channel">{{ song.artists[0].name }}</div>
                     </div>
                     <div class="actions">
                         <v-icon v-on:click="removeFromPlaylist(song)">clear</v-icon>
@@ -52,7 +52,7 @@ export default {
                 this.$store.dispatch('UPDATE_SPOTIFY_PLAYLIST', playlist)
             },
             get() {
-                return this.$store.getters['playlist']
+                return this.$store.getters['spotifyPlaylist']
             }
             
         },
@@ -124,6 +124,7 @@ export default {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
+    justify-content: space-between;
 }
 
 .details {
@@ -132,6 +133,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {
@@ -158,10 +160,8 @@ export default {
     color: $lightred;
 }
 
-.likes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.thumbnail {
+    height: 90px;
 }
 
 .ghost {

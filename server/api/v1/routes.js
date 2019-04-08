@@ -10,7 +10,7 @@ router.get('/youtube/search', youtubeController.search_videos)
 
 router.get('/spotify/login', spotifyController.login)
 router.get('/spotify/callback', spotifyController.callback)
-router.get('/spotify/search', spotifyController.search_songs)
+router.get('/spotify/refresh', spotifyController.refresh)
 
 
 module.exports = router
