@@ -23,13 +23,13 @@ exports.login = (req, res) => {
 		stateRandom: stateRandom
 	}
 
-	const scope = 'user-read-private user-read-email user-read-playback-state'
+	const scope = 'user-read-private user-read-birthdate user-read-email user-read-playback-state user-read-currently-playing user-modify-playback-state streaming'
 	res.redirect('https://accounts.spotify.com/authorize?' +
 	querystring.stringify({
 		response_type: 'code',
 		client_id: process.env.SPOTIFY_CLIENT_ID,
-		scope: scope,
 		redirect_uri: process.env.REDIRECT_URI,
+		scope: scope,
 		state: JSON.stringify(state)
 	}))
 }

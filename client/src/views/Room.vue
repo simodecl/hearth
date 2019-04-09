@@ -57,7 +57,7 @@ export default {
                     } else {
                         this.exists = true
                         this.$socket.emit('tv connect', this.$route.params.roomid)
-                        this.$store.dispatch('SET_ACTIVE', 'youtube')
+                        this.$store.dispatch('SET_ACTIVE', 'spotify')
                     }
                 })
                 .catch(() => {

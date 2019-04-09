@@ -123,6 +123,45 @@ export default new Vuex.Store({
 
       this._vm.$socket.emit('playVideo', newCurrent.id.videoId)
     },
+    PLAY_SONG({ state }) {
+      const room = db.collection('rooms').doc(state.room)
+      const playlist = state.spotify.playlist
+      const current = state.spotify.current
+      let history = state.spotify.history
+      const newCurrent = playlist[0]
+      const newPlaylist = playlist.splice(1)
+      if (current) {
+
+        history.length > 0 ? history.push(current) : history = [current]
+        room.update({
+          spotify_history: history,
+        })
+      }
+      room.update({
+        spotify_playlist: newPlaylist,
+        spotify_now: newCurrent
+      })
+
+      this._vm.$socket.emit('playSong', newCurrent.uri)
+
+    },
+    PLAY_NEXT_SONG({ state }) {
+      const room = db.collection('rooms').doc(state.room)
+      const current = state.spotify.current
+      const playlist = state.spotify.playlist
+      let history = state.spotify.history
+      history.length > 0 ? history.push(current) : history = [current]
+      const newCurrent = playlist[0]
+      const newPlaylist = playlist.splice(1)
+  
+      room.update({
+        spotify_playlist: newPlaylist,
+        spotify_now: newCurrent,
+        spotify_history: history
+      })
+
+      this._vm.$socket.emit('playSong', newCurrent.uri)
+    },
     SET_TOKENS({ state }, query) {
       const room = db.collection('rooms').doc(state.room)
       room.update({
@@ -134,7 +173,7 @@ export default new Vuex.Store({
     SET_ACCESS_TOKEN({ state }, token) {
       const room = db.collection('rooms').doc(state.room)
       room.update({
-        spotify_access_token:token
+        spotify_access_token: token
       })
     },
     DELETE_TOKENS({ state }) {

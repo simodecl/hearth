@@ -44,6 +44,14 @@ io.on('connection', (socket) => {
         }
  
     })
+    socket.on('playSong', (data) => {
+        for(let id in views) {
+            console.log('play video')
+            const view = views[id]
+            view.emit('playSong', data)
+        }
+ 
+    })
     socket.on('disconnect', () => {
         if(views[socket.id]) {
             console.log('A TV disconnected')

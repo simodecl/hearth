@@ -4,8 +4,8 @@
             <li class="result" v-for="(result, i) of history" :key="i">
                 <img class="thumbnail" :src="result.album.images[1].url">
                 <div class="details">
-                    <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
-                    <div class="channel">{{ result.snippet.channelTitle }}</div>
+                    <div class="title">{{ result.name.length > 50 ? result.name.substring(0,50) + "..." : result.name }}</div>
+                    <div class="channel">{{ result.artists[0].name }}</div>
                 </div>
                 <div class="actions">
                     <v-icon class="red-color" v-if="inPlaylist(result.id)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
@@ -54,7 +54,7 @@ export default {
         isFavourite() {
             return (id) => {
                 if (this.favs) {
-                    const filtered = this.favs.filter(vid => vid.id.videoId === id)
+                    const filtered = this.favs.filter(song => song.id === id)
                     return filtered.length === 1
                 } else {
                     return false

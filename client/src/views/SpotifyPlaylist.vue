@@ -90,7 +90,7 @@ export default {
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         play() {
-            // this.$store.dispatch('PLAY_VIDEO')
+            this.$store.dispatch('PLAY_SONG')
         }
     }
 }
