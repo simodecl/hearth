@@ -142,7 +142,7 @@ export default new Vuex.Store({
         spotify_now: newCurrent
       })
 
-      this._vm.$socket.emit('playSong', newCurrent.uri)
+      this._vm.$socket.emit('playSong', newCurrent)
 
     },
     PLAY_NEXT_SONG({ state }) {

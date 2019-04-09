@@ -1,6 +1,8 @@
 <template>
     <div>
-        Spotify mode
+        <div class="progress-bar">
+            <div ref="progress" class="progress"></div>
+        </div>
     </div>
 </template>
 
@@ -22,17 +24,33 @@ export default {
         }
     },
     methods: {
-        play(uri) {
+        play(song) {
             const data = {
-                uris: [uri]
+                uris: [song.uri]
             }
             axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${this.device}`, data)
-                .then(res => {
-                    console.log(res)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            .then(res => {
+                console.log(res)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            this.startProgressBar(song.duration_ms)
+        },
+        startProgressBar(duration) {
+            const progress = this.$refs.progress
+            let width
+            width = 0
+            console.log(duration)
+            const updateProgress = () => {
+                if (width >= 1000) {
+                clearInterval(interval)
+                } else {
+                width++
+                progress.style.width = width/10 + '%'
+                }
+            }
+            const interval = setInterval(updateProgress, duration/1000)
         },
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
@@ -49,7 +67,7 @@ export default {
             const { Player } = await this.waitForSpotifyWebPlaybackSDKToLoad()
             const sdk = new Player({
                 name: `Hearth: Room ${this.$route.params.roomid}`,
-                volume: 0.5,
+                volume: 0.25,
                 getOAuthToken: callback => { callback(this.token) }
             })
             console.log(JSON.stringify(sdk))
@@ -76,9 +94,23 @@ export default {
         }
     },
     sockets: {
-        playSong(uri) {
-            this.play(uri)
+        playSong(song) {
+            this.play(song)
         }
     },
 }
 </script>
+
+<style lang="scss" scoped>
+.progress-bar {
+  width: 100%;
+  background-color: $lightgrey;
+}
+
+.progress {
+  width: 1%;
+  height: 10px;
+  background-color: $lightred;
+}
+</style>
+

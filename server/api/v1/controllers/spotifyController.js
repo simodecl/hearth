@@ -69,7 +69,8 @@ exports.callback = (req, res) => {
 exports.refresh = (req, res) => {
   
 	// requesting access token from refresh token
-	const refresh_token = req.body.refresh_token
+	console.log(req.query)
+	const refresh_token = req.query.refresh_token
 	const authOptions = {
 		url: 'https://accounts.spotify.com/api/token',
 		headers: { 'Authorization': `Basic ${Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64')}`},
@@ -80,9 +81,10 @@ exports.refresh = (req, res) => {
 		json: true
 	}
 
-	request.post(authOptions, function(error, response, body) {
+	request.post(authOptions, (error, response) =>{
+		console.log(response.body)
 		if (!error && response.statusCode === 200) {
-			const access_token = body.access_token
+			const access_token = response.body.access_token
 			return res.send({ 'access_token': access_token })
 		}
 	})
