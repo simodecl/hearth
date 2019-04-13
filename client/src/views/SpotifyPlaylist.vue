@@ -1,6 +1,23 @@
 <template>
     <div class="main">
-        <v-icon class="play-arrow" v-on:click="play()">play_arrow</v-icon>
+        <div class="subtitle">Current Song</div>
+        <div class="result">
+            <img class="thumbnail" :src="currentSong.album.images[1].url">
+            <div class="details">
+                <div class="title">{{ currentSong.name }}</div>
+                <div class="channel">{{ currentSong.artists[0].name }}</div>
+            </div>
+        </div>
+        <div class="buttons">
+            <v-icon class="red-color" v-if="isFavourite(currentSong.id)" v-on:click="removeFromFavourites(currentSong)">star</v-icon>
+            <v-icon v-if="!isFavourite(currentSong.id)" v-on:click="addToFavourites(currentSong)">star_border</v-icon>
+        
+            <v-icon v-if="!spotifyPlaying" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
+            <v-icon v-if="spotifyPlaying" class="toggle-play" v-on:click="pause()">pause_circle_outline</v-icon>
+        
+            <v-icon v-on:click="skip()">skip_next</v-icon>
+        </div>
+        <div class="subtitle">Next up</div>
         <draggable v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(song, i) of playlist" :key="i">
@@ -44,8 +61,11 @@ export default {
         }
     },
     computed: {
-        currentVideo() {
-            return this.$store.getters['currentVideo']
+        currentSong() {
+            return this.$store.getters['currentSong']
+        },
+        spotifyPlaying() {
+            return this.$store.getters['spotifyPlaying']
         },
         playlist: {
             set(playlist) {
@@ -91,7 +111,13 @@ export default {
         },
         play() {
             this.$store.dispatch('PLAY_SONG')
-        }
+        },
+        pause() {
+            this.$store.dispatch('PAUSE_SONG')
+        },
+        skip() {
+            this.$store.dispatch('PLAY_NEXT_SONG')
+        },
     }
 }
 </script>
@@ -103,21 +129,12 @@ export default {
     margin: 20px;
 }
 
-.search {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 25px;
-}
-
-.search input {
+.subtitle {
+    color: $lightgrey;
     border-bottom: solid 2px $lightgrey;
-    text-align: left;
-    width: 95%;
-}
-
-.search .v-icon {
-    font-size: 30px;
-    color: white;
+    padding-bottom: 5px;
+    width: fit-content;
+    margin: 20px 0 10px;
 }
 
 .result {
@@ -169,8 +186,19 @@ export default {
   background: #c8ebfb;
 }
 
-.play-arrow {
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.buttons * {
     color: white !important;
     font-size: 30px;
+}
+.toggle-play {
+    font-size: 50px;
 }
 </style>

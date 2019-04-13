@@ -42,15 +42,20 @@ io.on('connection', (socket) => {
             const view = views[id]
             view.emit('playVideo', data)
         }
- 
     })
     socket.on('playSong', (data) => {
         for(let id in views) {
-            console.log('play video')
+            console.log('play song')
             const view = views[id]
             view.emit('playSong', data)
         }
- 
+    })
+    socket.on('pauseSong', () => {
+        for(let id in views) {
+            console.log('pause song')
+            const view = views[id]
+            view.emit('pauseSong')
+        }
     })
     socket.on('disconnect', () => {
         if(views[socket.id]) {

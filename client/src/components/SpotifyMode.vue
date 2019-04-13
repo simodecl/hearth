@@ -38,7 +38,9 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            device: ''
+            device: '',
+            playstate: null,
+            interval: null
         }
     },
     mounted () {
@@ -57,8 +59,10 @@ export default {
     },
     methods: {
         play(song) {
+            this.$store.dispatch('SONG_PLAYING', true)
             const data = {
-                uris: [song.uri]
+                uris: [song.uri],
+                position_ms: this.playstate ? this.playstate.position : 0
             }
             axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${this.device}`, data)
             .then(res => {
@@ -67,22 +71,30 @@ export default {
             .catch(error => {
                 console.log(error)
             })
-            this.startProgressBar(song.duration_ms)
+            if (this.interval) {
+                clearInterval(this.interval)
+                this.interval = null
+            }
+            if (this.playstate && this.playstate.track_window.current_track.uri === song.uri) {
+                this.startProgressBar(this.playstate.position, song.duration_ms)
+            } else {
+                this.startProgressBar(0, song.duration_ms)
+            }
         },
-        startProgressBar(duration) {
+        startProgressBar(position, duration) {
             const progress = this.$refs.progress
             let width
-            width = 0
+            width = position/duration*1000
             console.log(duration)
             const updateProgress = () => {
                 if (width >= 1000) {
-                clearInterval(interval)
+                clearInterval(this.interval)
                 } else {
                 width++
                 progress.style.width = width/10 + '%'
                 }
             }
-            const interval = setInterval(updateProgress, duration/1000)
+            this.interval = setInterval(updateProgress, (duration-position)/1000)
         },
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
@@ -111,6 +123,15 @@ export default {
             // Playback status updates
             sdk.addListener('player_state_changed', state => {
                 // Update UI information on player state changed
+                this.playstate = state
+                if (state.paused) {
+                    clearInterval(this.interval)
+                    this.interval = null
+                    this.$store.dispatch('SONG_PLAYING', false)
+                } else {
+                    this.$store.dispatch('SONG_PLAYING', true)
+                    !this.interval ? this.startProgressBar(state.position, state.duration) : ''
+                }
                 console.log(state)
             })
             // Ready
@@ -128,6 +149,15 @@ export default {
     sockets: {
         playSong(song) {
             this.play(song)
+        },
+        pauseSong() {
+            axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
         }
     },
 }

@@ -15,6 +15,7 @@ export default new Vuex.Store({
       history: []
     },
     spotify: {
+      playing: false,
       current: null,
       playlist: [],
       history: [],
@@ -33,6 +34,7 @@ export default new Vuex.Store({
       data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
       data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
       state.spotify.current = data.spotify_now
+      data.spotify_playing ? state.spotify.playing = data.spotify_playing : state.spotify.playing = false
       data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
       data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
       data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = ''
@@ -127,40 +129,52 @@ export default new Vuex.Store({
       const room = db.collection('rooms').doc(state.room)
       const playlist = state.spotify.playlist
       const current = state.spotify.current
-      let history = state.spotify.history
       const newCurrent = playlist[0]
       const newPlaylist = playlist.splice(1)
-      if (current) {
-
-        history.length > 0 ? history.push(current) : history = [current]
+      if (!current) {
         room.update({
-          spotify_history: history,
+          spotify_playing: true,
+          spotify_playlist: newPlaylist,
+          spotify_now: newCurrent
         })
+        this._vm.$socket.emit('playSong', newCurrent)
+      } else {
+        room.update({
+          spotify_playing: true,
+        })
+        this._vm.$socket.emit('playSong', current)
       }
+    },
+    PAUSE_SONG({state}) {
+      const room = db.collection('rooms').doc(state.room)
       room.update({
-        spotify_playlist: newPlaylist,
-        spotify_now: newCurrent
+        spotify_playing: false
       })
-
-      this._vm.$socket.emit('playSong', newCurrent)
-
+      this._vm.$socket.emit('pauseSong')
     },
     PLAY_NEXT_SONG({ state }) {
       const room = db.collection('rooms').doc(state.room)
       const current = state.spotify.current
       const playlist = state.spotify.playlist
-      let history = state.spotify.history
-      history.length > 0 ? history.push(current) : history = [current]
+      const history = state.spotify.history
+      let newHistory
+      history.length > 0 ? newHistory = [...history, current] : newHistory = [current]
       const newCurrent = playlist[0]
       const newPlaylist = playlist.splice(1)
   
       room.update({
         spotify_playlist: newPlaylist,
         spotify_now: newCurrent,
-        spotify_history: history
+        spotify_history: newHistory
       })
 
-      this._vm.$socket.emit('playSong', newCurrent.uri)
+      this._vm.$socket.emit('playSong', newCurrent)
+    },
+    SONG_PLAYING({state}, boolean) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_playing: boolean,
+      })
     },
     SET_TOKENS({ state }, query) {
       const room = db.collection('rooms').doc(state.room)
@@ -190,16 +204,19 @@ export default new Vuex.Store({
       return state.youtube.playlist
     },
     history(state) {
-      return state.youtube.history
+      return state.youtube.history.reverse()
     },
     currentVideo(state) {
       return state.youtube.current
+    },
+    spotifyPlaying(state) {
+      return state.spotify.playing
     },
     spotifyPlaylist(state) {
       return state.spotify.playlist
     },
     spotifyHistory(state) {
-      return state.spotify.history
+      return state.spotify.history.reverse()
     },
     currentSong(state) {
       return state.spotify.current
