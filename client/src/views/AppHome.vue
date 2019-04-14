@@ -1,8 +1,9 @@
 <template>
     <div>
-        <homelogo></homelogo>
-        <form action="submit">
-            <input type="text" placeholder="Enter code" />
+        <homelogo class="logo"></homelogo>
+        <div v-if="error" class="error"> {{ error }}</div>
+        <form v-on:submit.prevent="joinRoom()">
+            <input type="text" v-model="code" placeholder="Enter code" />
             <button type="submit" class="btn btn-join">Join room</button>
         </form>
     </div>
@@ -10,20 +11,60 @@
 
 <script>
 import HomeLogo from '../components/HomeLogo'
+import { db } from '@/firebase'
+
 export default {
     components: {
         'homelogo': HomeLogo
+    },
+    data() {
+        return {
+            code: '',
+            error: ''
+        }
+    },
+    methods: {
+        joinRoom() {
+            db.collection('rooms').doc(this.code).get()
+            .then(roomdoc => {
+                console.log(roomdoc)
+                if (!roomdoc.exists) {
+                    this.error = 'This room does not exist'
+                } else {
+                    this.$router.push({ path: `/app/room/${this.code}/youtube` })
+                }
+            })
+            .catch((error) => {
+                this.error = 'There was a problem trying to join the room.'
+                console.error(error)
+            })
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 
+.logo {
+    margin-bottom: 30px;
+}
+
+.error {
+    display: block;
+    background-color: $darkred;
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 1.4rem;
+    text-align: center;
+    margin: 0 auto;
+}
+
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 input {

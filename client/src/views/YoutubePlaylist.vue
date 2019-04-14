@@ -92,6 +92,7 @@ export default {
             localStorage.setItem('videos', JSON.stringify(this.favs))
         },
         play() {
+            this.$socket.emit('active', 'youtube')
             this.$store.dispatch('PLAY_VIDEO')
         }
     }

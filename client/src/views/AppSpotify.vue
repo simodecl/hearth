@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-view v-if="this.accessToken"></router-view>
+        <router-view v-if="accessToken"></router-view>
         <a v-else v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login">Login with Spotify</a>
     </div>
 </template>

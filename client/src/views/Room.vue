@@ -5,11 +5,11 @@
         <images-mode v-if="active === 'images'"></images-mode>
         <div v-if="!active">
             <roomempty></roomempty>
-            <div class="text" v-if="exists">
+            <div class="text" v-if="room">
                 <p>Your room code is:</p>
                 <p class="code">{{ this.$route.params.roomid }}</p>    
             </div>
-            <div class="text" v-if="!exists">This room does not exist</div>
+            <div class="text" v-if="!room">This room does not exist</div>
         </div>
         
     </div>
@@ -21,6 +21,7 @@ import YoutubeMode from '../components/YoutubeMode'
 import SpotifyMode from '../components/SpotifyMode'
 import ImagesMode from '../components/ImagesMode'
 import { db } from '@/firebase'
+import { setTimeout } from 'timers'
 
 export default {
     name: 'Room',
@@ -30,38 +31,42 @@ export default {
         'spotify-mode': SpotifyMode,
         'images-mode': ImagesMode,
     },
-    data() {
-        return {
-            exists: false,
-        }
-    },
     computed: {
         roomRef () {
             return db.collection('rooms').doc(this.$route.params.roomid)
+        },
+        room() {   
+            return this.$store.getters['room']
         },
         active() {   
             return this.$store.getters['active']
         }
     },
     created() {
-        this.$store.commit('SET_ROOM', this.$route.params.roomid)
-        this.checkRoom()
-        this.listenForDbChanges(this.$store.state.room)
+        setTimeout(() => {
+            this.checkRoom()
+            console.log(this.room)
+            this.listenForDbChanges(this.room)
+        }, 2000)
+    },
+    sockets: {
+        active(mode) {
+            this.$store.dispatch('SET_ACTIVE', mode)
+        }
     },
     methods: {
         checkRoom() {
             this.roomRef.get()
                 .then(roomdoc => {
                     if (!roomdoc.exists) {
-                        this.exists = false
+                        console.log('This room does not exist')
                     } else {
-                        this.exists = true
+                        this.$store.commit('SET_ROOM', this.$route.params.roomid)
                         this.$socket.emit('tv connect', this.$route.params.roomid)
-                        this.$store.dispatch('SET_ACTIVE', 'spotify')
                     }
                 })
-                .catch(() => {
-                    this.exists = false
+                .catch((error) => {
+                    console.error(error)
                 })
         },
         listenForDbChanges(roomcode) {

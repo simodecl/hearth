@@ -1,7 +1,7 @@
 <template>
     <div>
         <homelogo></homelogo>
-        <form class="form-join" @submit.prevent="joinRoom">
+        <form class="form-join" @submit.prevent="joinRoom()">
             <input class="input-join" type="text" placeholder="Enter code" v-model="room"/>
             <button type="submit" class="btn-join">Join room</button>
         </form>
@@ -11,18 +11,33 @@
 
 <script>
 import HomeLogo from '../components/HomeLogo'
+import { db } from '@/firebase'
+
 export default {
     components: {
         'homelogo': HomeLogo
     },
     data() {
         return {
-            room: ''
+            room: '',
+            error: ''
         }
     },
     methods: {
         joinRoom() {
-            this.$router.push({ path: `/room/${this.room}` })
+           db.collection('rooms').doc(this.room).get()
+            .then(roomdoc => {
+                console.log(roomdoc)
+                if (!roomdoc.exists) {
+                    this.error = 'This room does not exist'
+                } else {
+                    this.$router.push({ path: `/room/${this.room}` })
+                }
+            })
+            .catch((error) => {
+                this.error = 'There was a problem trying to join the room.'
+                console.error(error)
+            })
         }
     }
 }

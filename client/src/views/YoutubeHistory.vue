@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <ul id="results">
+        <ul v-if="history.length > 0" id="results">
             <li class="result" v-for="(result, i) of history" :key="i">
                 <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
                 <div class="details">

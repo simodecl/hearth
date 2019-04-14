@@ -36,6 +36,12 @@ io.on('connection', (socket) => {
         console.log('An app user connected')
         appviews[socket.id] = socket
     })
+    socket.on('active', (data) => {
+        for(let id in views) {
+            const view = views[id]
+            view.emit('active', data)
+        }
+    })
     socket.on('playVideo', (data) => {
         for(let id in views) {
             console.log('play video')

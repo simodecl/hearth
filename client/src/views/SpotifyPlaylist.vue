@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <div class="subtitle">Current Song</div>
-        <div class="result">
+        <div v-if="currentSong" class="result">
             <img class="thumbnail" :src="currentSong.album.images[1].url">
             <div class="details">
                 <div class="title">{{ currentSong.name }}</div>
@@ -110,6 +110,7 @@ export default {
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         play() {
+            this.$socket.emit('active', 'spotify')
             this.$store.dispatch('PLAY_SONG')
         },
         pause() {

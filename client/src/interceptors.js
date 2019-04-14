@@ -38,7 +38,7 @@ export default function execute() {
             })
             .catch(err => {
                 console.log(err.response)
-                // store.dispatch('DELETE_TOKENS')
+                store.dispatch('DELETE_TOKENS')
                 return Promise.reject(error)
             }).finally(execute)
         }

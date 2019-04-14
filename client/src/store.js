@@ -200,6 +200,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    room(state) {
+      return state.room
+    },
     playlist(state) {
       return state.youtube.playlist
     },
