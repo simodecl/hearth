@@ -1,6 +1,6 @@
 <template>
     <div class="main-yt">
-        <youtube v-if="video" class="video-yt" width="100%" height="100%" :video-id="video" :player-vars="playerVars" ref="youtube" v-on:ended="playNext" @playing="playing"></youtube>
+        <youtube class="video-yt" width="100%" height="100%" :video-id="video" :player-vars="playerVars" ref="youtube" v-on:ended="playNext" @playing="playing"></youtube>
     </div>
 </template>
 
@@ -29,9 +29,9 @@ export default {
     },
     methods: {
         play(videoId) {
+            this.$store.dispatch('VIDEO_PLAYING', true)
             this.video = videoId
-            console.log(this.player)
-            this.player.playVideo
+            this.player.playVideo()
         },
         playing() {
             clearInterval(this.progressBroadcaster)
@@ -51,6 +51,10 @@ export default {
     sockets: {
         playVideo(videoId) {
             this.play(videoId)
+        },
+        pauseVideo() {
+            this.$store.dispatch('VIDEO_PLAYING', false)
+            this.player.pauseVideo()
         }
     },
 }

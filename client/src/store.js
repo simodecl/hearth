@@ -10,12 +10,14 @@ export default new Vuex.Store({
     room: '',
     active: null,
     youtube: {
+      playing: false,
       current: null,
       playlist: [],
       history: []
     },
     spotify: {
       playing: false,
+      device: null,
       current: null,
       playlist: [],
       history: [],
@@ -30,7 +32,9 @@ export default new Vuex.Store({
     },
     [GET_DB_CHANGE](state, data) {
       state.active = data.active
+      state.spotify.device = data.spotify_device
       state.youtube.current = data.youtube_now
+      data.youtube_playing ? state.youtube.playing = data.youtube_playing : state.youtube.playing = false
       data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
       data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
       state.spotify.current = data.spotify_now
@@ -90,23 +94,29 @@ export default new Vuex.Store({
       const room = db.collection('rooms').doc(state.room)
       const playlist = state.youtube.playlist
       const current = state.youtube.current
-      let history = state.youtube.history
       const newCurrent = playlist[0]
       const newPlaylist = playlist.splice(1)
-      if (current) {
-
-        history.length > 0 ? history.push(current) : history = [current]
+      if (!current) {
         room.update({
-          youtube_history: history,
+          youtube_playing: true,
+          youtube_playlist: newPlaylist,
+          youtube_now: newCurrent
         })
+        this._vm.$socket.emit('playVideo', newCurrent.id.videoId)
+      } else {
+        room.update({
+          youtube_playing: true,
+        })
+        this._vm.$socket.emit('playVideo',  current.id.videoId)
       }
+
+    },
+    PAUSE_VIDEO({state}) {
+      const room = db.collection('rooms').doc(state.room)
       room.update({
-        youtube_playlist: newPlaylist,
-        youtube_now: newCurrent
+        youtube_playing: false
       })
-
-      this._vm.$socket.emit('playVideo', newCurrent.id.videoId)
-
+      this._vm.$socket.emit('pauseVideo')
     },
     PLAY_NEXT_VIDEO({ state }) {
       const room = db.collection('rooms').doc(state.room)
@@ -125,6 +135,12 @@ export default new Vuex.Store({
 
       this._vm.$socket.emit('playVideo', newCurrent.id.videoId)
     },
+    VIDEO_PLAYING({state}, boolean) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        youtube_playing: boolean,
+      })
+    },
     PLAY_SONG({ state }) {
       const room = db.collection('rooms').doc(state.room)
       const playlist = state.spotify.playlist
@@ -137,12 +153,12 @@ export default new Vuex.Store({
           spotify_playlist: newPlaylist,
           spotify_now: newCurrent
         })
-        this._vm.$socket.emit('playSong', newCurrent)
+        this._vm.$socket.emit('playSong', { song: newCurrent, next: false })
       } else {
         room.update({
           spotify_playing: true,
         })
-        this._vm.$socket.emit('playSong', current)
+        this._vm.$socket.emit('playSong',  { song: current, next: false })
       }
     },
     PAUSE_SONG({state}) {
@@ -163,17 +179,24 @@ export default new Vuex.Store({
       const newPlaylist = playlist.splice(1)
   
       room.update({
+        spotify_playing: true,
         spotify_playlist: newPlaylist,
         spotify_now: newCurrent,
         spotify_history: newHistory
       })
 
-      this._vm.$socket.emit('playSong', newCurrent)
+      this._vm.$socket.emit('playSong', { song: newCurrent, next: true })
     },
     SONG_PLAYING({state}, boolean) {
       const room = db.collection('rooms').doc(state.room)
       room.update({
         spotify_playing: boolean,
+      })
+    },
+    SET_DEVICE({ state }, device) {
+      const room = db.collection('rooms').doc(state.room)
+      room.update({
+        spotify_device: device
       })
     },
     SET_TOKENS({ state }, query) {
@@ -203,6 +226,9 @@ export default new Vuex.Store({
     room(state) {
       return state.room
     },
+    playing(state) {
+      return state.youtube.playing
+    },
     playlist(state) {
       return state.youtube.playlist
     },
@@ -211,6 +237,9 @@ export default new Vuex.Store({
     },
     currentVideo(state) {
       return state.youtube.current
+    },
+    spotifyDevice(state) {
+      return state.spotify.device
     },
     spotifyPlaying(state) {
       return state.spotify.playing

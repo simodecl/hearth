@@ -59,6 +59,7 @@ export default {
         },
     },
     created() {
+        this.setTitle()
         this.getVideos()
     },
     methods: {
@@ -77,17 +78,16 @@ export default {
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         removeFromFavourites(song) {
-            for (let i =0; i < this.favs.length; i++)
-            if (this.favs[i].id === song.id) {
-                this.favs.splice(i,1);
-                break;
-            }
-            for (let i =0; i < this.results.length; i++)
-            if (this.results[i].id === song.id) {
-                this.results.splice(i,1);
-                break;
+            for (let i = 0; i < this.favs.length; i++) {
+                if (this.favs[i].id === song.id) {
+                    this.favs.splice(i,1);
+                    break;
+                }
             }
             localStorage.setItem('songs', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Favourites'
         }
     }
 }

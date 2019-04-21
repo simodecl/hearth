@@ -27,19 +27,17 @@ export default function execute() {
              * Eject the interceptor so it doesn't loop in case
              * token refresh causes the 401 response
              */
-            axios.interceptors.response.eject(interceptor);
-            console.log(store.state.spotify.refresh_token)
-            axios.get(`/api/v1/spotify/refresh?refresh_token=${store.state.spotify.refresh_token}`)
+            axios.interceptors.response.eject(interceptor)
+
+            return axios.get(`/api/v1/spotify/refresh?refresh_token=${store.state.spotify.refresh_token}`)
             .then(res => {
-                console.log(res.data)
                 store.dispatch('SET_ACCESS_TOKEN', res.data.access_token)
                 error.response.config.headers['Authorization'] = `Bearer ${res.data.access_token}`
                 return axios(error.response.config)
             })
             .catch(err => {
-                console.log(err.response)
-                store.dispatch('DELETE_TOKENS')
-                return Promise.reject(error)
+                // store.dispatch('DELETE_TOKENS')
+                return Promise.reject(err)
             }).finally(execute)
         }
     );

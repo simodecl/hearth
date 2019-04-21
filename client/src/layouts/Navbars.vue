@@ -19,7 +19,7 @@
         <v-toolbar class="toolbar">
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
 
-            <v-toolbar-title class="white--text">Title</v-toolbar-title>
+            <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
 
         </v-toolbar>
             <slot/>
@@ -33,11 +33,6 @@
             <v-btn :to="`/app/room/${this.$route.params.roomid}/spotify`">
                 <span>Spotify</span>
                 <v-icon>$vuetify.icons.spotify</v-icon>
-            </v-btn>
-            <v-divider inset vertical></v-divider>
-            <v-btn :to="`/app/room/${this.$route.params.roomid}/images`">
-                <span>Images</span>
-                <v-icon>image</v-icon>
             </v-btn>
         </v-bottom-nav>
     </v-content>
@@ -53,7 +48,8 @@ export default {
     data () {
         return {
             drawer: null,
-            items: []
+            items: [],
+            title: 'Titlexd'
         }
     },
     computed: {
@@ -71,9 +67,6 @@ export default {
         'SET_ROOM',
         'GET_DB_CHANGE'
         ]),
-        setNav(items) {
-            this.items = items
-        },
         getState(roomcode) {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
@@ -158,10 +151,14 @@ export default {
 }
 
 .tabnav {
-    background-color: $grey !important;
-    position: fixed !important;
-    bottom: 0px !important;
-    height: 65px !important;
+    background-color: $grey;
+    position: fixed;
+    bottom: 0px;
+    height: 65px;
+}
+
+.tabnav .v-btn {
+    max-width: 100% !important;
 }
 
 .tabnav .v-btn .v-btn__content span, .tabnav .v-btn .v-btn__content .v-icon {

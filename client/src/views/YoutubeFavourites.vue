@@ -1,9 +1,6 @@
 <template>
     <div class="main">
-        <div v-if="loading">
-            <p class="loading">css spinner emoji</p>
-        </div>
-        <ul id="results" v-else>
+        <ul id="results">
             <li class="result" v-for="(result, i) of results" :key="i">
                 <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
                 <div class="details">
@@ -65,6 +62,7 @@ export default {
         },
     },
     created() {
+        this.setTitle()
         this.getVideos()
     },
     methods: {
@@ -97,6 +95,9 @@ export default {
                 break;
             }
             localStorage.setItem('videos', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Favourites'
         }
     }
 }
@@ -138,6 +139,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {

@@ -53,18 +53,18 @@ export default {
         },
         isFavourite() {
             return (id) => {
+                console.log(this.favs)
                 if (this.favs) {
                     const filtered = this.favs.filter(song => song.id === id)
                     return filtered.length === 1
                 } else {
                     return false
                 }
-                
             }
         },
     },
     created() {
-        
+        this.setTitle()
     },
     methods: {
         addToPlaylist(song) {
@@ -75,15 +75,20 @@ export default {
         },
         addToFavourites(song) {
             this.favs.push(song)
+
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         removeFromFavourites(song) {
-            for (let i =0; i < this.favs.length; i++)
-            if (this.favs[i].id === song.id) {
-                this.favs.splice(i,1);
-                break;
+            for (let i = 0; i < this.favs.length; i++) {
+                if (this.favs[i].id === song.id) {
+                    this.favs.splice(i,1);
+                    break;
+                }
             }
             localStorage.setItem('songs', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'History'
         }
     }
 }

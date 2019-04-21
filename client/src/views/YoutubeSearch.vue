@@ -45,6 +45,9 @@ export default {
 
         }
     },
+    created() {
+        this.setTitle()
+    },
     mounted() {
         if (localStorage.getItem('videos')) {
             try {
@@ -76,9 +79,6 @@ export default {
             }
         },
     },
-    created() {
-        
-    },
     methods: {
         async getVideos() {
             this.active = -1
@@ -104,8 +104,10 @@ export default {
                 break;
             }
             localStorage.setItem('videos', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Search'
         }
-
     }
 }
 </script>

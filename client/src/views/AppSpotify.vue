@@ -12,7 +12,6 @@ export default {
     created() {
         this.setNav()
         this.setToken()
-        console.log(this.accessToken)
     },
     computed: {
         accessToken() {
@@ -29,9 +28,7 @@ export default {
             ]
         },
         login(){
-            axios.get('/api/v1/spotify/login').then((token) => {
-                console.log(token)
-            })
+            axios.get('/api/v1/spotify/login')
         },
         setToken() {
             if (this.$route.query && !this.accessToken ) {

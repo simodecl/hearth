@@ -27,7 +27,6 @@ export default {
         joinRoom() {
             db.collection('rooms').doc(this.code).get()
             .then(roomdoc => {
-                console.log(roomdoc)
                 if (!roomdoc.exists) {
                     this.error = 'This room does not exist'
                 } else {
@@ -36,7 +35,6 @@ export default {
             })
             .catch((error) => {
                 this.error = 'There was a problem trying to join the room.'
-                console.error(error)
             })
         }
     }

@@ -1,18 +1,21 @@
 <template>
     <div class="main">
         <ul v-if="history.length > 0" id="results">
-            <li class="result" v-for="(result, i) of history" :key="i">
-                <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
-                <div class="details">
-                    <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
-                    <div class="channel">{{ result.snippet.channelTitle }}</div>
-                </div>
-                <div class="actions">
-                    <v-icon class="red-color" v-if="inPlaylist(result.id.videoId)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
-                    <v-icon v-if="!inPlaylist(result.id.videoId)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
-                    <v-icon class="red-color" v-if="isFavourite(result.id.videoId)" v-on:click="removeFromFavourites(result)">star</v-icon>
-                    <v-icon v-if="!isFavourite(result.id.videoId)" v-on:click="addToFavourites(result)">star_border</v-icon>
-                </div>
+            <li class="result" v-for="(result, index) of history" :key="`key-${index}`">
+                <template v-if="result.snippet">
+                    <img class="thumbnail" :src="result.snippet.thumbnails.default.url">
+                    <div class="details">
+                        <div class="title">{{ result.snippet.title.length > 50 ? result.snippet.title.substring(0,50) + "..." : result.snippet.title }}</div>
+                        <div class="channel">{{ result.snippet.channelTitle }}</div>
+                    </div>
+                    <div class="actions">
+                        <v-icon class="red-color" v-if="inPlaylist(result.id.videoId)" v-on:click="removeFromPlaylist(result)">playlist_add_check</v-icon>
+                        <v-icon v-if="!inPlaylist(result.id.videoId)" v-on:click="addToPlaylist(result)">playlist_add</v-icon>
+                        <v-icon class="red-color" v-if="isFavourite(result.id.videoId)" v-on:click="removeFromFavourites(result)">star</v-icon>
+                        <v-icon v-if="!isFavourite(result.id.videoId)" v-on:click="addToFavourites(result)">star_border</v-icon>
+                    </div>
+                </template>
+                
             </li>
         </ul>
 
@@ -68,7 +71,7 @@ export default {
         },
     },
     created() {
-        
+        this.setTitle()
     },
     methods: {
         addToPlaylist(video) {
@@ -88,6 +91,9 @@ export default {
                 break;
             }
             localStorage.setItem('videos', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'History'
         }
 
     }
@@ -130,6 +136,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {

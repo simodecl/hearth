@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div v-show="active === 'spotify'" class="main">
         <div class="background" v-if="current">
             <div class="background-thumbnail" v-bind:style="{ 'background-image': `url(${current.album.images[0].url})` }" />
             <div class="background-gradient"/>
@@ -8,11 +8,11 @@
             <div class="room-code">{{ this.$route.params.roomid }}</div>
             <img class="logo-img" src="../assets/hearth_logo_multicolor.png" />
         </div>
-        <div class="current-container">
+        <div v-if="current" class="current-container">
             <img class="current-thumbnail" :src="current.album.images[1].url" />
             <div class="current-info">
                 <div class="current-text">
-                    <div class="current-name">{{ current.name }} <span v-if="current.explicit" class="explicit">Explicit</span></div>
+                    <div class="current-name">{{ current.name }}</div>
                     <div class="current-artist">{{ current.artists[0].name }}</div>
                 </div>
                 <div class="progress-bar">
@@ -40,7 +40,7 @@ export default {
         return {
             device: '',
             playstate: null,
-            interval: null
+            interval: null,
         }
     },
     mounted () {
@@ -50,6 +50,9 @@ export default {
         token() {
             return this.$store.getters['accessToken']
         },
+        active() {
+            return this.$store.getters['active']
+        },
         current() {
             return this.$store.getters['currentSong']
         },
@@ -58,34 +61,31 @@ export default {
         }
     },
     methods: {
-        play(song) {
+        play(data) {
             this.$store.dispatch('SONG_PLAYING', true)
-            const data = {
-                uris: [song.uri],
+            const body = {
+                uris: [data.song.uri],
                 position_ms: this.playstate ? this.playstate.position : 0
             }
-            axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${this.device}`, data)
-            .then(res => {
-                console.log(res)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            if (data.next) {
+                body.position_ms = 0
+            }
+            axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${this.device}`, body)
+
             if (this.interval) {
                 clearInterval(this.interval)
                 this.interval = null
             }
-            if (this.playstate && this.playstate.track_window.current_track.uri === song.uri) {
-                this.startProgressBar(this.playstate.position, song.duration_ms)
+            if (this.playstate && this.playstate.track_window.current_track.uri === data.song.uri) {
+                this.startProgressBar(this.playstate.position, data.song.duration_ms)
             } else {
-                this.startProgressBar(0, song.duration_ms)
+                this.startProgressBar(0, data.song.duration_ms)
             }
         },
         startProgressBar(position, duration) {
             const progress = this.$refs.progress
             let width
             width = position/duration*1000
-            console.log(duration)
             const updateProgress = () => {
                 if (width >= 1000) {
                 clearInterval(this.interval)
@@ -98,13 +98,20 @@ export default {
         },
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
+                this.$nextTick(() => {
+                    console.log('Initiating')
                 if (window.Spotify) {
+                    console.log('Initiating2')
                     resolve(window.Spotify)
                 } else {
+                    console.log('Initiating3')
                     window.onSpotifyWebPlaybackSDKReady = () => {
+                        console.log('Initiating4')
                         resolve(window.Spotify)
                     }
                 }
+                })
+                
             })
         },
         initiatePlayer: async function () {
@@ -132,11 +139,16 @@ export default {
                     this.$store.dispatch('SONG_PLAYING', true)
                     !this.interval ? this.startProgressBar(state.position, state.duration) : ''
                 }
+                if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
+                    state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
+                    this.$store.dispatch('PLAY_NEXT_SONG')
+                }
                 console.log(state)
             })
             // Ready
             sdk.addListener('ready', ({ device_id }) => {
                 this.device = device_id
+                this.$store.dispatch('SET_DEVICE', device_id)
                 console.log('Ready with Device Id: ', device_id)
             })
             // Not Ready
@@ -147,8 +159,8 @@ export default {
         }
     },
     sockets: {
-        playSong(song) {
-            this.play(song)
+        playSong(song, next) {
+            this.play(song, next)
         },
         pauseSong() {
             axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)

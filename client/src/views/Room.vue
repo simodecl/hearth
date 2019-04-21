@@ -1,9 +1,8 @@
 <template>
     <div>
-        <youtube-mode v-if="active === 'youtube'"></youtube-mode>
-        <spotify-mode v-if="active === 'spotify'"></spotify-mode>
-        <images-mode v-if="active === 'images'"></images-mode>
-        <div v-if="!active">
+        <youtube-mode v-show="active === 'youtube'"></youtube-mode>
+        <spotify-mode ></spotify-mode>
+        <div v-show="!active">
             <roomempty></roomempty>
             <div class="text" v-if="room">
                 <p>Your room code is:</p>
@@ -19,7 +18,6 @@
 import RoomEmpty from '../components/RoomEmpty'
 import YoutubeMode from '../components/YoutubeMode'
 import SpotifyMode from '../components/SpotifyMode'
-import ImagesMode from '../components/ImagesMode'
 import { db } from '@/firebase'
 import { setTimeout } from 'timers'
 
@@ -29,7 +27,6 @@ export default {
         'roomempty': RoomEmpty,
         'youtube-mode': YoutubeMode,
         'spotify-mode': SpotifyMode,
-        'images-mode': ImagesMode,
     },
     computed: {
         roomRef () {
@@ -45,29 +42,25 @@ export default {
     created() {
         setTimeout(() => {
             this.checkRoom()
-            console.log(this.room)
-            this.listenForDbChanges(this.room)
-        }, 2000)
+        }, 1000)
     },
-    sockets: {
-        active(mode) {
-            this.$store.dispatch('SET_ACTIVE', mode)
-        }
+    mounted() {
+            this.listenForDbChanges(this.$route.params.roomid)
     },
     methods: {
         checkRoom() {
-            this.roomRef.get()
+            if (this.roomRef) {
+                 this.roomRef.get()
                 .then(roomdoc => {
                     if (!roomdoc.exists) {
-                        console.log('This room does not exist')
+
                     } else {
                         this.$store.commit('SET_ROOM', this.$route.params.roomid)
                         this.$socket.emit('tv connect', this.$route.params.roomid)
                     }
                 })
-                .catch((error) => {
-                    console.error(error)
-                })
+            }
+           
         },
         listenForDbChanges(roomcode) {
             db.collection("rooms").doc(roomcode)

@@ -6,7 +6,6 @@ import Room from './views/Room.vue'
 import AppHome from './views/AppHome.vue'
 import AppYoutube from './views/AppYoutube.vue'
 import AppSpotify from './views/AppSpotify.vue'
-import AppImages from './views/AppImages.vue'
 import YoutubeSearch from './views/YoutubeSearch.vue'
 import YoutubePlaylist from './views/YoutubePlaylist.vue'
 import YoutubeHistory from './views/YoutubeHistory.vue'
@@ -97,12 +96,6 @@ export default new Router({
 				component: SpotifyFavourites
 			}
 		]
-	},
-	{
-		path: "/app/room/:roomid/images",
-		name: "AppImages",
-		meta: { layout: "navbars" },
-		component: AppImages
-	},
+	}
   ]
 })

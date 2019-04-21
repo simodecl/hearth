@@ -1,16 +1,26 @@
 <template>
     <div class="main">
-        <div class="subtitle">Current Song</div>
-        <div v-if="currentSong" class="result">
-            <img class="thumbnail" :src="currentSong.album.images[1].url">
-            <div class="details">
-                <div class="title">{{ currentSong.name }}</div>
-                <div class="channel">{{ currentSong.artists[0].name }}</div>
+        <section v-if="currentSong" class="currentSong">
+            <div class="subtitle">Current Song</div>
+            <div v-if="currentSong" class="result">
+                <img class="thumbnail" :src="currentSong.album.images[1].url">
+                <div class="details">
+                    <div class="title">{{ currentSong.name }}</div>
+                    <div class="channel">{{ currentSong.artists[0].name }}</div>
+                </div>
             </div>
-        </div>
-        <div class="buttons">
-            <v-icon class="red-color" v-if="isFavourite(currentSong.id)" v-on:click="removeFromFavourites(currentSong)">star</v-icon>
-            <v-icon v-if="!isFavourite(currentSong.id)" v-on:click="addToFavourites(currentSong)">star_border</v-icon>
+            <div class="buttons">
+                <v-icon class="red-color" v-if="isFavourite(currentSong.id)" v-on:click="removeFromFavourites(currentSong)">star</v-icon>
+                <v-icon v-if="!isFavourite(currentSong.id)" v-on:click="addToFavourites(currentSong)">star_border</v-icon>
+            
+                <v-icon v-if="!spotifyPlaying" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
+                <v-icon v-if="spotifyPlaying" class="toggle-play" v-on:click="pause()">pause_circle_outline</v-icon>
+            
+                <v-icon v-on:click="skip()">skip_next</v-icon>
+            </div>
+        </section>
+        <div v-else class="buttons">
+            <v-icon>star_border</v-icon>
         
             <v-icon v-if="!spotifyPlaying" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
             <v-icon v-if="spotifyPlaying" class="toggle-play" v-on:click="pause()">pause_circle_outline</v-icon>
@@ -20,7 +30,7 @@
         <div class="subtitle">Next up</div>
         <draggable v-model="playlist" id="results">
             <transition-group>
-                <div class="result" v-for="(song, i) of playlist" :key="i">
+                <div class="result" v-for="(song, i) of playlist" :key="`key-${i}`">
                     <img class="thumbnail" :src="song.album.images[1].url">
                     <div class="details">
                         <div class="title">{{ song.name.length > 50 ? song.name.substring(0,50) + "..." : song.name }}</div>
@@ -39,6 +49,7 @@
 
 <script>
 import draggable from "vuedraggable"
+import { setTimeout } from 'timers';
 
 export default {
     components: {
@@ -50,6 +61,9 @@ export default {
             dragging: false,
             enabled: true
         }
+    },
+    created() {
+        this.setTitle()
     },
     mounted() {
         if (localStorage.getItem('songs')) {
@@ -63,6 +77,9 @@ export default {
     computed: {
         currentSong() {
             return this.$store.getters['currentSong']
+        },
+        active() {
+            return this.$store.getters['active']
         },
         spotifyPlaying() {
             return this.$store.getters['spotifyPlaying']
@@ -78,14 +95,14 @@ export default {
         },
         inPlaylist() {
             return (id) => {
-                const filtered = this.playlist.filter(song => song.id.songId === id)
+                const filtered = this.playlist.filter(song => song.id === id)
                 return filtered.length === 1
             }
         },
         isFavourite() {
             return (id) => {
                 if (this.favs) {
-                    const filtered = this.favs.filter(song => song.id.songId === id)
+                    const filtered = this.favs.filter(song => song.id === id)
                     return filtered.length === 1
                 } else {
                     return false
@@ -102,23 +119,43 @@ export default {
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         removeFromFavourites(song) {
-            for (let i =0; i < this.favs.length; i++)
-            if (this.favs[i].id === song.id) {
-                this.favs.splice(i,1);
-                break;
+            for (let i = 0; i < this.favs.length; i++) {
+                if (this.favs[i].id === song.id) {
+                    this.favs.splice(i,1);
+                    break;
+                }
             }
             localStorage.setItem('songs', JSON.stringify(this.favs))
         },
         play() {
-            this.$socket.emit('active', 'spotify')
-            this.$store.dispatch('PLAY_SONG')
+            if (this.active !== 'spotify') {
+                this.$store.dispatch('PAUSE_VIDEO')
+                this.$store.dispatch('SET_ACTIVE', 'spotify')
+                this.$store.dispatch('VIDEO_PLAYING', false)
+                this.$store.dispatch('PLAY_SONG')
+
+    
+            } else {
+                this.$store.dispatch('PLAY_SONG')
+            }
         },
         pause() {
             this.$store.dispatch('PAUSE_SONG')
         },
         skip() {
-            this.$store.dispatch('PLAY_NEXT_SONG')
+            if (this.active !== 'spotify') {
+                this.$store.dispatch('SET_ACTIVE', 'spotify')
+                this.$store.dispatch('VIDEO_PLAYING', false)
+                this.$store.dispatch('PLAY_NEXT_SONG')
+
+    
+            } else {
+                this.$store.dispatch('PLAY_NEXT_SONG')
+            }
         },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Playlist'
+        }
     }
 }
 </script>
@@ -199,6 +236,11 @@ export default {
     color: white !important;
     font-size: 30px;
 }
+
+.buttons .red-color {
+    color: $lightred !important;
+}
+
 .toggle-play {
     font-size: 50px;
 }

@@ -27,50 +27,43 @@ const appviews = {}
 
 io.on('connection', (socket) => {
     socket.on('tv connect', (roomcode) => {
-        console.log('A TV connected')
         views[socket.id] = socket
         views[socket.id].room = roomcode
         RoomManager.join(views[socket.id].room, socket.id)
     })
     socket.on('app connect', () => {
-        console.log('An app user connected')
         appviews[socket.id] = socket
-    })
-    socket.on('active', (data) => {
-        for(let id in views) {
-            const view = views[id]
-            view.emit('active', data)
-        }
     })
     socket.on('playVideo', (data) => {
         for(let id in views) {
-            console.log('play video')
             const view = views[id]
             view.emit('playVideo', data)
         }
     })
+    socket.on('pauseVideo', (data) => {
+        for(let id in views) {
+            const view = views[id]
+            view.emit('pauseVideo', data)
+        }
+    })
     socket.on('playSong', (data) => {
         for(let id in views) {
-            console.log('play song')
             const view = views[id]
             view.emit('playSong', data)
         }
     })
     socket.on('pauseSong', () => {
         for(let id in views) {
-            console.log('pause song')
             const view = views[id]
             view.emit('pauseSong')
         }
     })
     socket.on('disconnect', () => {
         if(views[socket.id]) {
-            console.log('A TV disconnected')
             RoomManager.leave(views[socket.id].room, socket.id)
             delete views[socket.id]
         }
         if(appviews[socket.id]) {
-            console.log('An app user disconnected')
             delete appviews[socket.id]
         }
     })
@@ -92,7 +85,7 @@ app.use((req, res, next) => {
     next(err)
 })
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     res.status(err.status || 500)
     res.json({
         message: err.message,
@@ -105,5 +98,6 @@ Launch server
 */
 const port = process.env.PORT || '8000'
 server.listen(port, () => {
+    /*eslint no-console: "error"*/
     console.log(`Node server running on port ${port}!`)
 })

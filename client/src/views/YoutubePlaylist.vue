@@ -1,9 +1,36 @@
 <template>
     <div class="main">
-        <v-icon class="play-arrow" v-on:click="play()">play_arrow</v-icon>
+        <section v-if="currentVideo" class="currentVideo">
+            <div class="subtitle">Current Song</div>
+            <div v-if="currentVideo" class="result">
+                <img class="thumbnail" :src="currentVideo.snippet.thumbnails.default.url">
+                <div class="details">
+                    <div class="title">{{ currentVideo.snippet.title.length > 50 ? currentVideo.snippet.title.substring(0,50) + "..." : currentVideo.snippet.title }}</div>
+                    <div class="channel">{{ currentVideo.snippet.channelTitle }}</div>
+                </div>
+            </div>
+            <div class="buttons">
+                <v-icon class="red-color" v-if="isFavourite(currentVideo.id.videoId)" v-on:click="removeFromFavourites(currentVideo)">star</v-icon>
+                <v-icon v-if="!isFavourite(currentVideo.id.videoId)" v-on:click="addToFavourites(currentVideo)">star_border</v-icon>
+            
+                <v-icon v-if="!playing" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
+                <v-icon v-if="playing" class="toggle-play" v-on:click="pause()">pause_circle_outline</v-icon>
+            
+                <v-icon v-on:click="skip()">skip_next</v-icon>
+            </div>
+        </section>
+        <div v-else class="buttons">
+            <v-icon>star_border</v-icon>
+        
+            <v-icon v-if="!playing" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
+            <v-icon v-if="playing" class="toggle-play" v-on:click="pause()">pause_circle_outline</v-icon>
+        
+            <v-icon v-on:click="skip()">skip_next</v-icon>
+        </div>
+        <div class="subtitle">Next up</div>
         <draggable v-model="playlist" id="results">
             <transition-group>
-                <div class="result" v-for="(vid, i) of playlist" :key="i">
+                <div class="result" v-for="(vid, i) of playlist" :key="`key-${i}`">
                     <img class="thumbnail" :src="vid.snippet.thumbnails.default.url">
                     <div class="details">
                         <div class="title">{{ vid.snippet.title.length > 50 ? vid.snippet.title.substring(0,50) + "..." : vid.snippet.title }}</div>
@@ -21,13 +48,12 @@
 </template>
 
 <script>
-// import YoutubeResult from '../components/YoutubeResult'
+import axios from 'axios'
 import draggable from "vuedraggable"
 
 export default {
     components: {
         draggable
-        // 'youtube-result': YoutubeResult
     },
     data() {
         return {
@@ -35,6 +61,9 @@ export default {
             dragging: false,
             enabled: true
         }
+    },
+    created() {
+        this.setTitle()
     },
     mounted() {
         if (localStorage.getItem('videos')) {
@@ -49,6 +78,15 @@ export default {
         currentVideo() {
             return this.$store.getters['currentVideo']
         },
+        active() {
+            return this.$store.getters['active']
+        },
+        device() {
+            return this.$store.getters['spotifyDevice']
+        },
+        playing() {
+            return this.$store.getters['playing']
+        },
         playlist: {
             set(playlist) {
                 this.$store.dispatch('UPDATE_YOUTUBE_PLAYLIST', playlist)
@@ -56,7 +94,6 @@ export default {
             get() {
                 return this.$store.getters['playlist']
             }
-            
         },
         inPlaylist() {
             return (id) => {
@@ -92,8 +129,30 @@ export default {
             localStorage.setItem('videos', JSON.stringify(this.favs))
         },
         play() {
-            this.$socket.emit('active', 'youtube')
-            this.$store.dispatch('PLAY_VIDEO')
+            if (this.active !== 'youtube') {
+                axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)
+                this.$store.dispatch('SONG_PLAYING', false)
+                this.$store.dispatch('SET_ACTIVE', 'youtube')
+                this.$store.dispatch('PLAY_VIDEO')
+            } else {
+                this.$store.dispatch('PLAY_VIDEO')
+            }
+        },
+        pause() {
+            this.$store.dispatch('PAUSE_VIDEO')
+        },
+        skip() {
+            if (this.active !== 'youtube') {
+                axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)
+                this.$store.dispatch('SONG_PLAYING', false)
+                this.$store.dispatch('SET_ACTIVE', 'youtube')
+                this.$store.dispatch('PLAY_NEXT_VIDEO')
+            } else {
+                this.$store.dispatch('PLAY_NEXT_VIDEO')
+            }
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Playlist'
         }
     }
 }
@@ -135,6 +194,7 @@ export default {
     justify-content: space-between;
     height: 90px;
     margin-left: 10px;
+    width: 100%;
 }
 
 .title {
@@ -175,5 +235,34 @@ export default {
 .play-arrow {
     color: white !important;
     font-size: 30px;
+}
+
+.subtitle {
+    color: $lightgrey;
+    border-bottom: solid 2px $lightgrey;
+    padding-bottom: 5px;
+    width: fit-content;
+    margin: 20px 0 10px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.buttons * {
+    color: white !important;
+    font-size: 30px;
+}
+
+.buttons .red-color {
+    color: $lightred !important;
+}
+
+.toggle-play {
+    font-size: 50px;
 }
 </style>

@@ -73,7 +73,7 @@ export default {
         },
     },
     created() {
-        
+        this.setTitle()
     },
     methods: {
         async getVideos() {
@@ -100,6 +100,9 @@ export default {
                 break;
             }
             localStorage.setItem('songs', JSON.stringify(this.favs))
+        },
+        setTitle() {
+            this.$parent.$parent.$parent.title = 'Search'
         }
     }
 }
