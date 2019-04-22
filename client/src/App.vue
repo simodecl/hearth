@@ -30,7 +30,8 @@ html {
 }
 
 #app {
-	min-height: 100%;
+  width: 100vw;
+  height: 100vh;
 	background-color: $darkgrey;
 	color: white;
 	font-family: 'Lato', sans-serif;
