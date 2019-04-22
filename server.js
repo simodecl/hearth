@@ -39,28 +39,28 @@ io.on('connection', (socket) => {
         //     const view = views[id]
         //     view.emit('playVideo', data)
         // }
-        socket.emit('playVideo', data)
+        socket.broadcast.emit('playVideo', data)
     })
     socket.on('pauseVideo', (data) => {
         // for(let id in views) {
         //     const view = views[id]
         //     view.emit('pauseVideo', data)
         // }
-        socket.emit('pauseVideo', data)
+        socket.broadcast.emit('pauseVideo', data)
     })
     socket.on('playSong', (data) => {
         // for(let id in views) {
         //     const view = views[id]
         //     view.emit('playSong', data)
         // }
-        socket.emit('playSong', data)
+        socket.broadcast.emit('playSong', data)
     })
     socket.on('pauseSong', () => {
         // for(let id in views) {
         //     const view = views[id]
         //     view.emit('pauseSong')
         // }
-        socket.emit('pauseSong')
+        socket.broadcast.emit('pauseSong')
     })
     socket.on('disconnect', () => {
         if(views[socket.id]) {
