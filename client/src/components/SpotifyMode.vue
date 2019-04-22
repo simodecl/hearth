@@ -126,18 +126,20 @@ export default {
             // Playback status updates
             sdk.addListener('player_state_changed', state => {
                 // Update UI information on player state changed
-                this.playstate = state
-                if (state.paused) {
-                    clearInterval(this.interval)
-                    this.interval = null
-                    this.$store.dispatch('SONG_PLAYING', false)
-                } else {
-                    this.$store.dispatch('SONG_PLAYING', true)
-                    !this.interval ? this.startProgressBar(state.position, state.duration) : ''
-                }
-                if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
-                    state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
-                    this.$store.dispatch('PLAY_NEXT_SONG')
+                if (state) {
+                    this.playstate = state
+                    if (state.paused) {
+                        clearInterval(this.interval)
+                        this.interval = null
+                        this.$store.dispatch('SONG_PLAYING', false)
+                    } else {
+                        this.$store.dispatch('SONG_PLAYING', true)
+                        !this.interval ? this.startProgressBar(state.position, state.duration) : ''
+                    }
+                    if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
+                        state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
+                        this.$store.dispatch('PLAY_NEXT_SONG')
+                    }
                 }
             })
             // Ready
