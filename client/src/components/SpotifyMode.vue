@@ -62,6 +62,7 @@ export default {
     },
     methods: {
         play(data) {
+            console.log('Playing song')
             this.$store.dispatch('SONG_PLAYING', true)
             const body = {
                 uris: [data.song.uri],
@@ -99,14 +100,10 @@ export default {
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
                 this.$nextTick(() => {
-                    console.log('Initiating')
                 if (window.Spotify) {
-                    console.log('Initiating2')
                     resolve(window.Spotify)
                 } else {
-                    console.log('Initiating3')
                     window.onSpotifyWebPlaybackSDKReady = () => {
-                        console.log('Initiating4')
                         resolve(window.Spotify)
                     }
                 }
@@ -121,7 +118,6 @@ export default {
                 volume: 0.25,
                 getOAuthToken: callback => { callback(this.token) }
             })
-            console.log(JSON.stringify(sdk))
             // Error handling
             sdk.addListener('initialization_error', ({ message }) => { console.log('Initialization_error: ' + message) })
             sdk.addListener('authentication_error', ({ message }) => { console.log('Authentication_error: ' + message) })
@@ -143,7 +139,6 @@ export default {
                     state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
                     this.$store.dispatch('PLAY_NEXT_SONG')
                 }
-                console.log(state)
             })
             // Ready
             sdk.addListener('ready', ({ device_id }) => {
@@ -164,12 +159,6 @@ export default {
         },
         pauseSong() {
             axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)
-            .then(res => {
-                console.log(res)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
         }
     },
 }
