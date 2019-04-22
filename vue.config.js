@@ -9,13 +9,13 @@ module.exports = {
             app: './client/src/main.js'
         }
     },
-    pages: {
-        index: {
-          entry: './client/src/main.js',
-          template: './client/public/index.html',
-          filename: 'index.html',
-        },
-    },
+    // pages: {
+    //     index: {
+    //       entry: './client/src/main.js',
+    //       template: './client/public/index.html',
+    //       filename: 'index.html',
+    //     },
+    // },
     outputDir: './client/dist',
     devServer: {
         proxy: {
@@ -28,8 +28,8 @@ module.exports = {
      css: {
         loaderOptions: {
             sass: {
-                data: '@import "./client/src/assets/scss/global.scss";'
+                data: '@import "public/assets/scss/global.scss";'
             }
         }
-    }  
+    },
 }

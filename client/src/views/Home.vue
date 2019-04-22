@@ -7,7 +7,11 @@
                 <button class="btn btn-join">Join room</button>
             </router-link>
         </div>
-        <img class="corner" src="../assets/corner.png" />
+        <img class="corner" src="/assets/corner.png" />
+        <a class="github" href="http://github.com/simodecl/hearth" target="__blank">
+            <v-icon>$vuetify.icons.github</v-icon>
+        </a>
+        <footer class="copyright">&copy; Arteveldehogeschool, opleiding Grafische &amp; Digitale Media</footer>
     </div>
 </template>
 
@@ -64,8 +68,29 @@ export default {
 
 .corner {
     position: absolute;
-    bottom: 0px;
+    bottom: 32px;
     width: 30vw;
     max-width: 150px;
+}
+
+.github {
+    position: absolute;
+    left: 25px;
+    bottom: 60px;
+    z-index: 1;
+}
+
+.github .v-icon {
+    color: white !important;
+    font-size: 3.5rem;
+}
+
+.copyright {
+    position: absolute;
+    bottom: 0px;
+    width: 100vw;
+    text-align: center;
+    background-color: black; 
+    padding: 10px;
 }
 </style>

@@ -5,7 +5,8 @@
             <input class="input-join" type="text" placeholder="Enter code" v-model="room"/>
             <button type="submit" class="btn-join">Join room</button>
         </form>
-        <img class="corner" src="../assets/corner.png" />
+        <img class="corner" src="/assets/corner.png" />
+        <footer class="copyright">&copy; Arteveldehogeschool, opleiding Grafische &amp; Digitale Media</footer>
     </div>
 </template>
 
@@ -87,5 +88,14 @@ export default {
     bottom: 0px;
     width: 30vw;
     max-width: 150px;
+}
+
+.copyright {
+    position: absolute;
+    bottom: 0px;
+    width: 100vw;
+    text-align: center;
+    background-color: black; 
+    padding: 10px;
 }
 </style>

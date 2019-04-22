@@ -17,7 +17,7 @@ const RoomManager = require('./server/utils/roomManager')
 /*
 Custom Routes
 */
-const routes = require('./server/config/routes')
+const routes = require('./server/api/routes')
 
 /*
 Socket.io
@@ -73,31 +73,28 @@ io.on('connection', (socket) => {
 /*
 Express.js settings
 */
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, 'client/dist')))
 app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
-app.use('', routes)
-app.use((req, res, next) => {
-    const err = new Error('Not Found!')
-    err.status = 404
-    next(err)
-})
+app.use('/api', routes)
 
-app.use((err, req, res) => {
-    res.status(err.status || 500)
-    res.json({
-        message: err.message,
-        error: err
-    })
-})
+// app.use((err, req, res) => {
+//     res.status(err.status || 500)
+//     res.json({
+//         message: err.message,
+//         error: err
+//     })
+// })
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist/index.html'))
+})
 /*
 Launch server
 */
 const port = process.env.PORT || '8000'
 server.listen(port, () => {
-    /*eslint no-console: "error"*/
     console.log(`Node server running on port ${port}!`)
 })

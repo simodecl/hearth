@@ -6,7 +6,7 @@
         </div>
         <div class="room">
             <div class="room-code">{{ this.$route.params.roomid }}</div>
-            <img class="logo-img" src="../assets/hearth_logo_multicolor.png" />
+            <img class="logo-img" src="/assets/hearth_logo_multicolor.png" />
         </div>
         <div v-if="current" class="current-container">
             <img class="current-thumbnail" :src="current.album.images[1].url" />

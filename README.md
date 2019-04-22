@@ -38,6 +38,9 @@ npm run server
 
 ```
 FIREBASE_DB=https://database-13579.firebaseio.com
+REDIRECT_URI=http://url.com/api/callback
+SPOTIFY_CLIENT_ID=<spotify_client_id>
+SPOTIFY_CLIENT_SECRET=<spotify_client_secret>
 VUE_APP_FIREBASE_DB=https://database-13579.firebaseio.com
 VUE_APP_FIREBASE_APIKEY=<firebase_api_key>
 VUE_APP_FIREBASE_DOMAIN=database-13579.firebaseapp.com
@@ -58,4 +61,9 @@ POST /api/v1/rooms
 ### Search YouTube videos
 ```
 GET /api/v1/youtube/search?q=<search_query>
+```
+
+### Login with Spotify
+```
+GET /api/v1/spotify/login
 ```

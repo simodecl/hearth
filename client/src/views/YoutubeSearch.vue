@@ -7,7 +7,7 @@
             </button>
         </form>
         <div v-if="loading">
-            <p class="loading">css spinner emoji</p>
+            <spinner></spinner>
         </div>
         <ul id="results" v-else>
             <li class="result" v-for="(result, i) of results" :key="i">
@@ -31,10 +31,11 @@
 <script>
 // import YoutubeResult from '../components/YoutubeResult'
 import axios from 'axios'
+import Spinner from '../components/spinner'
 
 export default {
     components: {
-        // 'youtube-result': YoutubeResult
+        'spinner': Spinner
     },
     data() {
         return {

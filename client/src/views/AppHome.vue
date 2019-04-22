@@ -6,6 +6,7 @@
             <input type="text" v-model="code" placeholder="Enter code" />
             <button type="submit" class="btn btn-join">Join room</button>
         </form>
+        <footer class="copyright">&copy; Arteveldehogeschool, Grafische &amp; Digitale Media</footer>
     </div>
 </template>
 
@@ -95,5 +96,14 @@ input {
 
 .btn-join {
     background-color: $lightred;
+}
+
+.copyright {
+    position: absolute;
+    bottom: 0px;
+    width: 100vw;
+    text-align: center;
+    background-color: black; 
+    padding: 10px;
 }
 </style>

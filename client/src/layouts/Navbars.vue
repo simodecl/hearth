@@ -2,7 +2,7 @@
   <v-layout>
     <v-navigation-drawer v-model="drawer" app class="sidenav">
         <div class="logo-container">
-            <img class="logo" src="../assets/hearth_logo_multicolor.png" />
+            <img class="logo" src="/assets/hearth_logo_multicolor.png" />
         </div>
         <div class="nav-list">
           <router-link class="nav-list-item" v-for="item in items" :key="item.title" :to="`/app/room/${$route.params.roomid}/${item.link}`">
@@ -49,7 +49,7 @@ export default {
         return {
             drawer: null,
             items: [],
-            title: 'Titlexd'
+            title: 'Hearth'
         }
     },
     computed: {
@@ -80,6 +80,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+html {
+  overflow: scroll !important;
+}
 
 .spacer {
     height:70px;
@@ -110,7 +113,7 @@ export default {
 
 .nav-list {
     height: calc(100vh - 125px);
-    background: url('../assets/bar.png') 100%;
+    background: url('/assets/bar.png') 100%;
     width: 80px;
 }
 

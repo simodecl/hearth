@@ -19,7 +19,8 @@ Vue.config.productionTip = false
 Vue.use(Vuetify, {
   icons: {
     'youtube': 'fab fa-youtube',
-    'spotify': 'fab fa-spotify'
+    'spotify': 'fab fa-spotify',
+    'github': 'fab fa-github'
   }
 })
 Vue.use(new VueSocketIO({

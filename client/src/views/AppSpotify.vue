@@ -1,7 +1,9 @@
 <template>
     <div>
         <router-view v-if="accessToken"></router-view>
-        <a v-else v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login">Login with Spotify</a>
+        <div v-else class="btn-container">
+            <a v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login"><v-icon>$vuetify.icons.spotify</v-icon> Login with Spotify</a>
+        </div>
     </div>
 </template>
 
@@ -38,3 +40,27 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.btn-container {
+    display: block;
+    margin: 50px auto;
+    width: 200px;
+}
+
+.btn-login {
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #1ED760;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-login .v-icon {
+    color: white !important;
+    font-size: 1.5rem;
+}
+</style>
+

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img class="logo-img" src="../assets/hearth_logo_multicolor.png" />
+    <img class="logo-img" src="/assets/hearth_logo_multicolor.png" />
     <h1 class="app-title">Hearth</h1>
     <div class="app-subtitle">Pull up a chair by the Hearth!</div>
   </div>

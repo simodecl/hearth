@@ -22,7 +22,7 @@ export default {
 
 <style lang="scss">
 html {
-  overflow:   scroll;
+  overflow: scroll;
 }
 ::-webkit-scrollbar {
     width: 0px;
