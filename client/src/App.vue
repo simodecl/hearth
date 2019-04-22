@@ -21,9 +21,6 @@ export default {
 </script>
 
 <style lang="scss">
-html {
-  overflow: scroll;
-}
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
