@@ -53,7 +53,7 @@ export default {
                 console.log(`Updating from ${oldValue} to ${newValue}`);
 
                 // Do whatever makes sense now
-                if (newValue !== '') {
+                if (newValue !== null) {
                     this.initiatePlayer()
                 }
             },
