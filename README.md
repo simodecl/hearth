@@ -38,6 +38,8 @@ npm run server
 
 ```
 FIREBASE_DB=https://database-13579.firebaseio.com
+FIREBASE_PRIVATE_KEY_ID=<firebase_private_key_id>
+FIREBASE_PRIVATE_KEY=<firebase_private_key>
 REDIRECT_URI=http://url.com/api/callback
 SPOTIFY_CLIENT_ID=<spotify_client_id>
 SPOTIFY_CLIENT_SECRET=<spotify_client_secret>
