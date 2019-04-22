@@ -53,7 +53,6 @@ export default {
         },
         isFavourite() {
             return (id) => {
-                console.log(this.favs)
                 if (this.favs) {
                     const filtered = this.favs.filter(song => song.id === id)
                     return filtered.length === 1

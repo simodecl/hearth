@@ -1,7 +1,7 @@
 <template>
     <div v-show="active === 'spotify'" class="main">
         <div class="background" v-if="current">
-            <div class="background-thumbnail" v-bind:style="{ 'background-image': `url(${current.album.images[0].url})` }" />
+            <div v-if="current.album" class="background-thumbnail" v-bind:style="{ 'background-image': `url(${current.album.images[0].url})` }" />
             <div class="background-gradient"/>
         </div>
         <div class="room">
@@ -9,7 +9,7 @@
             <img class="logo-img" src="/assets/hearth_logo_multicolor.png" />
         </div>
         <div v-if="current" class="current-container">
-            <img class="current-thumbnail" :src="current.album.images[1].url" />
+            <img v-if="current.album" class="current-thumbnail" :src="current.album.images[1].url" />
             <div class="current-info">
                 <div class="current-text">
                     <div class="current-name">{{ current.name }}</div>
@@ -22,7 +22,7 @@
         </div>
         <div v-if="playlist.length > 0" class="playlist-container">
             <div class="playlist-item" v-for="(song,index) in playlist.slice(0, 6)" v-bind:key="index">
-                <img class="song-thumbnail" :src="song.album.images[1].url" />
+                <img v-if="song.album" class="song-thumbnail" :src="song.album.images[1].url" />
                 <div class="song-info">
                     <div class="song-name">{{ song.name }}</div>
                     <div class="song-artist">{{ song.artists[0].name }}</div>
@@ -62,7 +62,6 @@ export default {
     },
     methods: {
         play(data) {
-            console.log('Playing song')
             this.$store.dispatch('SONG_PLAYING', true)
             const body = {
                 uris: [data.song.uri],

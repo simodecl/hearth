@@ -13,7 +13,7 @@ import axios from 'axios'
 export default {
     created() {
         this.setNav()
-        this.setToken()
+        setTimeout(this.setToken(), 1000)
     },
     computed: {
         accessToken() {

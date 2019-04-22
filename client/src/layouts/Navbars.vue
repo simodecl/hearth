@@ -71,7 +71,6 @@ export default {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
                     this.GET_DB_CHANGE(room.data())
-                    console.log(this.state)
                 })
         }
 
