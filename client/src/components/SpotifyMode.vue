@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="playlist-container">
+        <div v-if="playlist.length > 0" class="playlist-container">
             <div class="playlist-item" v-for="(song,index) in playlist.slice(0, 6)" v-bind:key="index">
                 <img class="song-thumbnail" :src="song.album.images[1].url" />
                 <div class="song-info">
