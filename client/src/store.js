@@ -41,9 +41,9 @@ export default new Vuex.Store({
       data.spotify_playing ? state.spotify.playing = data.spotify_playing : state.spotify.playing = false
       data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
       data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
-      data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = ''
-      data.spotify_refresh_token ? state.spotify.refresh_token = data.spotify_refresh_token : state.spotify.refresh_token = ''
-      data.spotify_expires_in ? state.spotify.expires_in = data.spotify_expires_in : state.spotify.expires_in = ''
+      data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = null
+      data.spotify_refresh_token ? state.spotify.refresh_token = data.spotify_refresh_token : state.spotify.refresh_token = null
+      data.spotify_expires_in ? state.spotify.expires_in = data.spotify_expires_in : state.spotify.expires_in = null
     }
     
   },
