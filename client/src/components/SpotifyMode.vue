@@ -100,15 +100,17 @@ export default {
             const progress = this.$refs.progress
             let width
             width = position/duration*1000
-            const updateProgress = () => {
-                if (width >= 1000) {
-                clearInterval(this.interval)
-                } else {
-                width++
-                progress.style.width = width/10 + '%'
+            if(progress) {
+                const updateProgress = () => {
+                    if (width >= 1000) {
+                    clearInterval(this.interval)
+                    } else {
+                    width++
+                    progress.style.width = width/10 + '%'
+                    }
                 }
+                this.interval = setInterval(updateProgress, (duration-position)/1000)
             }
-            this.interval = setInterval(updateProgress, (duration-position)/1000)
         },
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
