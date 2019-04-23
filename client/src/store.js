@@ -31,19 +31,21 @@ export default new Vuex.Store({
       state.room = room
     },
     [GET_DB_CHANGE](state, data) {
-      data.active ? state.active = data.active : state.active = null
-      data.spotify_device ? state.spotify.device = data.spotify_device : state.spotify.device = null
-      data.youtube_now ? state.youtube.current = data.youtube_now : 
-      data.youtube_playing ? state.youtube.playing = data.youtube_playing : state.youtube.playing = false
-      data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
-      data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
-      data.spotify_now ? state.spotify.current = data.spotify_now : 
-      data.spotify_playing ? state.spotify.playing = data.spotify_playing : state.spotify.playing = false
-      data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
-      data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
-      data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = null
-      data.spotify_refresh_token ? state.spotify.refresh_token = data.spotify_refresh_token : state.spotify.refresh_token = null
-      data.spotify_expires_in ? state.spotify.expires_in = data.spotify_expires_in : state.spotify.expires_in = null
+      if (data) {
+        data.active ? state.active = data.active : state.active = null
+        data.spotify_device ? state.spotify.device = data.spotify_device : state.spotify.device = null
+        data.youtube_now ? state.youtube.current = data.youtube_now : 
+        data.youtube_playing ? state.youtube.playing = data.youtube_playing : state.youtube.playing = false
+        data.youtube_playlist ? state.youtube.playlist = data.youtube_playlist : state.youtube.playlist = []
+        data.youtube_history ? state.youtube.history = data.youtube_history : state.youtube.history = []
+        data.spotify_now ? state.spotify.current = data.spotify_now : 
+        data.spotify_playing ? state.spotify.playing = data.spotify_playing : state.spotify.playing = false
+        data.spotify_playlist ? state.spotify.playlist = data.spotify_playlist : state.spotify.playlist = []
+        data.spotify_history ? state.spotify.history = data.spotify_history : state.spotify.history = []
+        data.spotify_access_token ? state.spotify.access_token = data.spotify_access_token : state.spotify.access_token = null
+        data.spotify_refresh_token ? state.spotify.refresh_token = data.spotify_refresh_token : state.spotify.refresh_token = null
+        data.spotify_expires_in ? state.spotify.expires_in = data.spotify_expires_in : state.spotify.expires_in = null
+      }
     }
     
   },
