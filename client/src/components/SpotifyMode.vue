@@ -50,9 +50,7 @@ export default {
         this.$store.watch(
             (state, getters) => getters.accessToken,
             (newValue, oldValue) => {
-                console.log(`Updating from ${oldValue} to ${newValue}`);
-
-                // Do whatever makes sense now
+                
                 if (newValue !== null) {
                     this.initiatePlayer()
                 }
