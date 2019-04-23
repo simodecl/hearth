@@ -37,6 +37,7 @@ npm run server
 ## Environment Variables
 
 ```
+BASE_URL=http://url.com
 FIREBASE_DB=https://database-13579.firebaseio.com
 FIREBASE_PRIVATE_KEY_ID=<firebase_private_key_id>
 FIREBASE_PRIVATE_KEY=<firebase_private_key>
