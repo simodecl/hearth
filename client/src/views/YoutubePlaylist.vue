@@ -19,7 +19,7 @@
                 <v-icon v-on:click="skip()">skip_next</v-icon>
             </div>
         </section>
-        <div v-if="!currentVideo.id" class="buttons">
+        <div v-if="!currentVideo" class="buttons">
             <v-icon>star_border</v-icon>
         
             <v-icon v-if="!playing" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
