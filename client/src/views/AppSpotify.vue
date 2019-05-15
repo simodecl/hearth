@@ -65,8 +65,9 @@ export default {
 }
 
 .disclaimer {
-    width: 95vw;
+    width: 90vw;
     text-align: center;
+    margin: 25px auto;
 }
 </style>
 
