@@ -1,7 +1,8 @@
 <template>
     <div>
         <router-view v-if="accessToken"></router-view>
-        <div v-else class="btn-container">
+        <p class="disclaimer">By logging in with Spotify, you grant the app access to your information and let others search and play songs on your account. </p>
+        <div v-if="!accessToken" class="btn-container">
             <a v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login"><v-icon>$vuetify.icons.spotify</v-icon> Login with Spotify</a>
         </div>
     </div>
@@ -61,6 +62,11 @@ export default {
 .btn-login .v-icon {
     color: white !important;
     font-size: 1.5rem;
+}
+
+.disclaimer {
+    width: 95vw;
+    text-align: center;
 }
 </style>
 

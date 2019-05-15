@@ -10,10 +10,10 @@
             <div>{{ item.title }}</div>
           </router-link>
         </div>
-        <div class="nav-exit">
+        <router-link class="nav-exit" to="/app">
           <v-icon>exit_to_app</v-icon>
           <div>Exit room</div>
-        </div>
+        </router-link>
     </v-navigation-drawer>
     <v-content :class="{ 'drawer-open': drawer }">
         <v-toolbar class="toolbar">

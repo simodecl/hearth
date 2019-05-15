@@ -132,10 +132,10 @@ export default {
                 getOAuthToken: callback => { callback(this.token) }
             })
             // Error handling
-            sdk.addListener('initialization_error', ({ message }) => { console.log('Initialization_error: ' + message) })
-            sdk.addListener('authentication_error', ({ message }) => { console.log('Authentication_error: ' + message) })
-            sdk.addListener('account_error', ({ message }) => { console.log('Account_error: ' + message) })
-            sdk.addListener('playback_error', ({ message }) => { console.log('Playback_error: ' + message) })
+            // sdk.addListener('initialization_error', ({ message }) => { console.log('Initialization_error: ' + message) })
+            // sdk.addListener('authentication_error', ({ message }) => { console.log('Authentication_error: ' + message) })
+            // sdk.addListener('account_error', ({ message }) => { console.log('Account_error: ' + message) })
+            // sdk.addListener('playback_error', ({ message }) => { console.log('Playback_error: ' + message) })
             // Playback status updates
             sdk.addListener('player_state_changed', state => {
                 // Update UI information on player state changed
@@ -159,12 +159,11 @@ export default {
             sdk.addListener('ready', ({ device_id }) => {
                 this.device = device_id
                 this.$store.dispatch('SET_DEVICE', device_id)
-                console.log('Ready with Device Id: ', device_id)
             })
             // Not Ready
-            sdk.addListener('not_ready', ({ device_id }) => {
-                console.log('Not ready with device Id: ', device_id)
-            })
+            // sdk.addListener('not_ready', ({ device_id }) => {
+            //     console.log('Not ready with device Id: ', device_id)
+            // })
             sdk.connect()
         }
     },
