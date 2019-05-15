@@ -136,6 +136,8 @@ html {
     align-items: center;
     padding-top: 10px;
     height: 56px;
+    text-decoration: none;
+    color: white;
 }
 
 .v-icon {
