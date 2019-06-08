@@ -156,7 +156,7 @@ export default {
                             if (!this.ended) {
                                 this.ended = true
                                 this.$store.dispatch('PLAY_NEXT_SONG')
-                                setTimeout(this.ended = false, 1000)
+                                setTimeout(this.ended = false, 2000)
                             }
                         
                     }
