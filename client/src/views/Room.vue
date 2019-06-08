@@ -40,11 +40,8 @@ export default {
             return this.$store.getters['active']
         }
     },
-    created() {
-        this.checkRoom()
-        
-    },
     mounted() {
+        this.checkRoom()
         this.$store.watch(
             (state, getters) => getters.room,
             (newValue, oldValue) => {
