@@ -34,7 +34,6 @@
 
 <script>
 import axios from 'axios'
-import { setTimeout } from 'timers';
 
 export default {
     data() {
@@ -55,6 +54,7 @@ export default {
                 
                 if (newValue !== null) {
                     this.initiatePlayer()
+                    oldValue = newValue
                 }
             },
         );
@@ -157,7 +157,8 @@ export default {
                             if (!this.ended) {
                                 this.ended = true
                                 this.$store.dispatch('PLAY_NEXT_SONG')
-                                setTimeout(this.ended = false, 2000)
+                            } else {
+                                this.ended = false
                             }
                         
                     }
