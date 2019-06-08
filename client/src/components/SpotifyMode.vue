@@ -246,8 +246,8 @@ export default {
 }
 
 .current-thumbnail {
-    width: 20vw;
-    height: 20vw;
+    width: 35vh;
+    height: 35vh;
     margin-right: 5vw;
     box-shadow: 0px 0px 2vw black;
     z-index: 2;
@@ -258,7 +258,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 50vw;
-    height: 20vw;
+    height: 35vh;
     z-index: 2;
 }
 

@@ -51,6 +51,7 @@ export default {
                 
                 if (newValue !== null) {
                     this.roomExists = true
+                    this.$forceUpdate()
                     oldValue = newValue
                 }
             },
