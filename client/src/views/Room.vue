@@ -40,19 +40,10 @@ export default {
             return this.$store.getters['active']
         }
     },
-    mounted() {
+    created() {
         this.checkRoom()
-        this.$store.watch(
-            (state, getters) => getters.room,
-            (newValue, oldValue) => {
-                
-                if (newValue !== null) {
-                    this.roomExists = true
-                    this.$forceUpdate()
-                    oldValue = newValue
-                }
-            },
-        );
+    },
+    mounted() {
         this.listenForDbChanges(this.$route.params.roomid)
     },
     methods: {
@@ -63,6 +54,7 @@ export default {
             if (exists) {
                 this.$store.commit('SET_ROOM', this.$route.params.roomid)
                 this.$socket.emit('tv connect', this.$route.params.roomid)
+                this.roomExists = true
             }
         },
         listenForDbChanges(roomcode) {

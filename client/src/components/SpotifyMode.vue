@@ -141,7 +141,6 @@ export default {
             // Playback status updates
             sdk.addListener('player_state_changed', state => {
                 // Update UI information on player state changed
-                console.log(state)
                 if (state) {
                     this.playstate = state
                     if (state.paused) {
