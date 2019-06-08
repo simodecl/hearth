@@ -34,6 +34,7 @@
 
 <script>
 import axios from 'axios'
+import { setTimeout } from 'timers';
 
 export default {
     data() {
@@ -41,6 +42,7 @@ export default {
             device: '',
             playstate: null,
             interval: null,
+            ended: false,
         }
     },
     mounted () {
@@ -151,7 +153,12 @@ export default {
                     }
                     if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
                         state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
-                        this.$store.dispatch('PLAY_NEXT_SONG')
+                            if (!this.ended) {
+                                this.ended = true
+                                this.$store.dispatch('PLAY_NEXT_SONG')
+                                setTimeout(this.ended = false, 1000)
+                            }
+                        
                     }
                 }
             })
