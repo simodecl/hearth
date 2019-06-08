@@ -34,6 +34,7 @@ export default {
             axios.get('/api/v1/spotify/login')
         },
         setToken() {
+            console.log(this.$route.query)
             if (this.$route.query.access_token && !this.accessToken ) {
                 this.$store.dispatch('SET_TOKENS', this.$route.query)
             }

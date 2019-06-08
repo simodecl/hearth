@@ -1,7 +1,6 @@
 <template>
     <div>
-        <homelogo></homelogo>
-        
+        <homelogo></homelogo> 
     </div>
 </template>
 

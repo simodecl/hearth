@@ -49,7 +49,6 @@
 
 <script>
 import draggable from "vuedraggable"
-import { setTimeout } from 'timers';
 
 export default {
     components: {
