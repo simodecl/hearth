@@ -69,7 +69,6 @@ exports.callback = (req, res) => {
 exports.refresh = (req, res) => {
   
 	// requesting access token from refresh token
-	console.log(req.query)
 	const refresh_token = req.query.refresh_token
 	const authOptions = {
 		url: 'https://accounts.spotify.com/api/token',
@@ -82,7 +81,6 @@ exports.refresh = (req, res) => {
 	}
 
 	request.post(authOptions, (error, response) =>{
-		console.log(response.body)
 		if (!error && response.statusCode === 200) {
 			const access_token = response.body.access_token
 			return res.send({ 'access_token': access_token })
