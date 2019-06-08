@@ -25,7 +25,7 @@ Vue.use(Vuetify, {
 })
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'https://hearthapp.herokuapp.com'
+  connection: 'localhost:8000'
 }))
 Vue.use(VueYoutube)
 const int = interceptorSetup()

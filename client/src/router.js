@@ -19,7 +19,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL || 'https://hearthapp.herokuapp.com',
+  base: process.env.BASE_URL || 'localhost:8080',
   routes: [
 	{
 		path: '/',

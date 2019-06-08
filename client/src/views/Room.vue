@@ -4,11 +4,11 @@
         <spotify-mode ></spotify-mode>
         <div v-show="!active">
             <roomempty></roomempty>
-            <div class="text" v-if="room">
+            <div class="text" v-if="roomExists">
                 <p>Your room code is:</p>
                 <p class="code">{{ this.$route.params.roomid }}</p>    
             </div>
-            <div class="text" v-if="!room">This room does not exist yet or is being created.</div>
+            <div class="text" v-if="!roomExists">This room does not exist yet or is being created.</div>
         </div>
         
     </div>
@@ -19,7 +19,6 @@ import RoomEmpty from '../components/RoomEmpty'
 import YoutubeMode from '../components/YoutubeMode'
 import SpotifyMode from '../components/SpotifyMode'
 import { db } from '@/firebase'
-import { setTimeout } from 'timers'
 
 export default {
     name: 'Room',
@@ -28,39 +27,44 @@ export default {
         'youtube-mode': YoutubeMode,
         'spotify-mode': SpotifyMode,
     },
+    data() {
+        return {
+            roomExists: false
+        }
+    },
     computed: {
         roomRef () {
             return db.collection('rooms').doc(this.$route.params.roomid)
-        },
-        room() {   
-            return this.$store.getters['room']
         },
         active() {   
             return this.$store.getters['active']
         }
     },
     created() {
-        setTimeout(() => {
-            this.checkRoom()
-        }, 2000)
+        this.checkRoom()
+        
     },
     mounted() {
-            this.listenForDbChanges(this.$route.params.roomid)
+        this.$store.watch(
+            (state, getters) => getters.room,
+            (newValue, oldValue) => {
+                
+                if (newValue !== null) {
+                    this.roomExists = true
+                }
+            },
+        );
+        this.listenForDbChanges(this.$route.params.roomid)
     },
     methods: {
-        checkRoom() {
-            if (this.roomRef) {
-                 this.roomRef.get()
-                .then(roomdoc => {
-                    if (!roomdoc.exists) {
+        async checkRoom() {
+            const roomdoc = await this.roomRef.get()
+            const exists = await roomdoc.exists
 
-                    } else {
-                        this.$store.commit('SET_ROOM', this.$route.params.roomid)
-                        this.$socket.emit('tv connect', this.$route.params.roomid)
-                    }
-                })
+            if (exists) {
+                this.$store.commit('SET_ROOM', this.$route.params.roomid)
+                this.$socket.emit('tv connect', this.$route.params.roomid)
             }
-           
         },
         listenForDbChanges(roomcode) {
             db.collection("rooms").doc(roomcode)

@@ -20,7 +20,7 @@ module.exports = {
     devServer: {
         proxy: {
             '^/api': {
-                target: 'https://hearthapp.herokuapp.com',
+                target: 'localhost:8000',
                 changeOrigin: true
             }
         }
