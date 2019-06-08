@@ -58,7 +58,7 @@ exports.callback = (req, res) => {
 		request.post(authOptions, (error, response, body) => {
 			if (!error && response.statusCode === 200) {
   
-			res.redirect(`http://localhost:8080/app/room/${state.room}/spotify?${querystring.stringify(body)}`)
+			res.redirect(`${process.env.BASE_URL}/app/room/${state.room}/spotify?${querystring.stringify(body)}`)
 			} else {
 				return res.json(error)
 			}

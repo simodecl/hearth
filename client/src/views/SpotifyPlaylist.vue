@@ -28,7 +28,7 @@
             <v-icon v-on:click="skip()">skip_next</v-icon>
         </div>
         <div class="subtitle">Next up</div>
-        <draggable v-model="playlist" id="results">
+        <draggable v-if="playlist.length > 0" v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(song, i) of playlist" :key="`key-${i}`">
                     <img class="thumbnail" :src="song.album.images[1].url">

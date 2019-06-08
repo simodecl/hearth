@@ -1,7 +1,7 @@
 <template>
     <div v-show="active === 'spotify'" class="main">
         <div class="background" v-if="current">
-            <div class="background-thumbnail" v-bind:style="{ 'background-image': `url(${current.album.images[0].url})` }" />
+            <div v-if="current.album" class="background-thumbnail" v-bind:style="{ 'background-image': `url(${current.album.images[0].url})` }" />
             <div class="background-gradient"/>
         </div>
         <div class="room">
@@ -9,7 +9,7 @@
             <img class="logo-img" src="/assets/hearth_logo_multicolor.png" />
         </div>
         <div v-if="current" class="current-container">
-            <img class="current-thumbnail" :src="current.album.images[1].url" />
+            <img v-if="current.album" class="current-thumbnail" :src="current.album.images[1].url" />
             <div class="current-info">
                 <div class="current-text">
                     <div class="current-name">{{ current.name }}</div>
@@ -20,9 +20,9 @@
                 </div>
             </div>
         </div>
-        <div class="playlist-container">
+        <div v-if="playlist.length > 0" class="playlist-container">
             <div class="playlist-item" v-for="(song,index) in playlist.slice(0, 6)" v-bind:key="index">
-                <img class="song-thumbnail" :src="song.album.images[1].url" />
+                <img v-if="song.album" class="song-thumbnail" :src="song.album.images[1].url" />
                 <div class="song-info">
                     <div class="song-name">{{ song.name }}</div>
                     <div class="song-artist">{{ song.artists[0].name }}</div>
@@ -44,7 +44,19 @@ export default {
         }
     },
     mounted () {
-        this.initiatePlayer()
+        if(this.token) {
+            this.initiatePlayer()
+        }
+        this.$store.watch(
+            (state, getters) => getters.accessToken,
+            (newValue, oldValue) => {
+                
+                if (newValue !== null) {
+                    this.initiatePlayer()
+                }
+            },
+        );
+        
     },
     computed: {
         token() {
@@ -86,27 +98,25 @@ export default {
             const progress = this.$refs.progress
             let width
             width = position/duration*1000
-            const updateProgress = () => {
-                if (width >= 1000) {
-                clearInterval(this.interval)
-                } else {
-                width++
-                progress.style.width = width/10 + '%'
+            if(progress) {
+                const updateProgress = () => {
+                    if (width >= 1000) {
+                    clearInterval(this.interval)
+                    } else {
+                    width++
+                    progress.style.width = width/10 + '%'
+                    }
                 }
+                this.interval = setInterval(updateProgress, (duration-position)/1000)
             }
-            this.interval = setInterval(updateProgress, (duration-position)/1000)
         },
         waitForSpotifyWebPlaybackSDKToLoad: async function () {
             return new Promise(resolve => {
                 this.$nextTick(() => {
-                    console.log('Initiating')
                 if (window.Spotify) {
-                    console.log('Initiating2')
                     resolve(window.Spotify)
                 } else {
-                    console.log('Initiating3')
                     window.onSpotifyWebPlaybackSDKReady = () => {
-                        console.log('Initiating4')
                         resolve(window.Spotify)
                     }
                 }
@@ -121,40 +131,39 @@ export default {
                 volume: 0.25,
                 getOAuthToken: callback => { callback(this.token) }
             })
-            console.log(JSON.stringify(sdk))
             // Error handling
-            sdk.addListener('initialization_error', ({ message }) => { console.log('Initialization_error: ' + message) })
-            sdk.addListener('authentication_error', ({ message }) => { console.log('Authentication_error: ' + message) })
-            sdk.addListener('account_error', ({ message }) => { console.log('Account_error: ' + message) })
-            sdk.addListener('playback_error', ({ message }) => { console.log('Playback_error: ' + message) })
+            // sdk.addListener('initialization_error', ({ message }) => { console.log('Initialization_error: ' + message) })
+            // sdk.addListener('authentication_error', ({ message }) => { console.log('Authentication_error: ' + message) })
+            // sdk.addListener('account_error', ({ message }) => { console.log('Account_error: ' + message) })
+            // sdk.addListener('playback_error', ({ message }) => { console.log('Playback_error: ' + message) })
             // Playback status updates
             sdk.addListener('player_state_changed', state => {
                 // Update UI information on player state changed
-                this.playstate = state
-                if (state.paused) {
-                    clearInterval(this.interval)
-                    this.interval = null
-                    this.$store.dispatch('SONG_PLAYING', false)
-                } else {
-                    this.$store.dispatch('SONG_PLAYING', true)
-                    !this.interval ? this.startProgressBar(state.position, state.duration) : ''
+                if (state) {
+                    this.playstate = state
+                    if (state.paused) {
+                        clearInterval(this.interval)
+                        this.interval = null
+                        this.$store.dispatch('SONG_PLAYING', false)
+                    } else {
+                        this.$store.dispatch('SONG_PLAYING', true)
+                        !this.interval ? this.startProgressBar(state.position, state.duration) : ''
+                    }
+                    if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
+                        state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
+                        this.$store.dispatch('PLAY_NEXT_SONG')
+                    }
                 }
-                if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
-                    state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
-                    this.$store.dispatch('PLAY_NEXT_SONG')
-                }
-                console.log(state)
             })
             // Ready
             sdk.addListener('ready', ({ device_id }) => {
                 this.device = device_id
                 this.$store.dispatch('SET_DEVICE', device_id)
-                console.log('Ready with Device Id: ', device_id)
             })
             // Not Ready
-            sdk.addListener('not_ready', ({ device_id }) => {
-                console.log('Not ready with device Id: ', device_id)
-            })
+            // sdk.addListener('not_ready', ({ device_id }) => {
+            //     console.log('Not ready with device Id: ', device_id)
+            // })
             sdk.connect()
         }
     },
@@ -164,12 +173,6 @@ export default {
         },
         pauseSong() {
             axios.put(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device}`)
-            .then(res => {
-                console.log(res)
-            })
-            .catch(error => {
-                console.log(error.response)
-            })
         }
     },
 }

@@ -5,20 +5,18 @@ exports.create_room = (req, res, next) => {
     //Generate random 4 digit ID
     const random = Math.floor(1000 + Math.random() * 9000)
     const newRoom = db.collection('rooms').doc(random.toString()).set({
-        active: '',
+        active: null,
         code: random,
         connections: [],
-        youtube_now: {},
+        youtube_now: null,
         youtube_playing: false,
         youtube_playlist: [],
         youtube_history: [],
-        spotify_now: {},
+        spotify_now: null,
         spotify_playing: false,
         spotify_playlist: [],
         spotify_history: [],
-        spotify_access_token: '',
-        spotify_expires_in: '',
-        spotify_refresh_token: ''
+
     })
     if (newRoom) {
         return res.json(random)

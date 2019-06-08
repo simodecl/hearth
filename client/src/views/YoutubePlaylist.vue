@@ -2,14 +2,14 @@
     <div class="main">
         <section v-if="currentVideo" class="currentVideo">
             <div class="subtitle">Current Song</div>
-            <div v-if="currentVideo" class="result">
+            <div v-if="currentVideo.snippet" class="result">
                 <img class="thumbnail" :src="currentVideo.snippet.thumbnails.default.url">
                 <div class="details">
                     <div class="title">{{ currentVideo.snippet.title.length > 50 ? currentVideo.snippet.title.substring(0,50) + "..." : currentVideo.snippet.title }}</div>
                     <div class="channel">{{ currentVideo.snippet.channelTitle }}</div>
                 </div>
             </div>
-            <div class="buttons">
+            <div v-if="currentVideo.id" class="buttons">
                 <v-icon class="red-color" v-if="isFavourite(currentVideo.id.videoId)" v-on:click="removeFromFavourites(currentVideo)">star</v-icon>
                 <v-icon v-if="!isFavourite(currentVideo.id.videoId)" v-on:click="addToFavourites(currentVideo)">star_border</v-icon>
             
@@ -19,7 +19,7 @@
                 <v-icon v-on:click="skip()">skip_next</v-icon>
             </div>
         </section>
-        <div v-else class="buttons">
+        <div v-if="!currentVideo" class="buttons">
             <v-icon>star_border</v-icon>
         
             <v-icon v-if="!playing" class="toggle-play" v-on:click="play()">play_circle_outline</v-icon>
@@ -28,7 +28,7 @@
             <v-icon v-on:click="skip()">skip_next</v-icon>
         </div>
         <div class="subtitle">Next up</div>
-        <draggable v-model="playlist" id="results">
+        <draggable v-if="playlist.length > 0" v-model="playlist" id="results">
             <transition-group>
                 <div class="result" v-for="(vid, i) of playlist" :key="`key-${i}`">
                     <img class="thumbnail" :src="vid.snippet.thumbnails.default.url">

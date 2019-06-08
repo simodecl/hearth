@@ -8,7 +8,7 @@
                 <p>Your room code is:</p>
                 <p class="code">{{ this.$route.params.roomid }}</p>    
             </div>
-            <div class="text" v-if="!room">This room does not exist</div>
+            <div class="text" v-if="!room">This room does not exist yet or is being created.</div>
         </div>
         
     </div>
@@ -42,7 +42,7 @@ export default {
     created() {
         setTimeout(() => {
             this.checkRoom()
-        }, 1000)
+        }, 2000)
     },
     mounted() {
             this.listenForDbChanges(this.$route.params.roomid)

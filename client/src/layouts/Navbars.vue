@@ -10,10 +10,10 @@
             <div>{{ item.title }}</div>
           </router-link>
         </div>
-        <div class="nav-exit">
+        <router-link class="nav-exit" to="/app">
           <v-icon>exit_to_app</v-icon>
           <div>Exit room</div>
-        </div>
+        </router-link>
     </v-navigation-drawer>
     <v-content :class="{ 'drawer-open': drawer }">
         <v-toolbar class="toolbar">
@@ -71,7 +71,6 @@ export default {
             db.collection("rooms").doc(roomcode)
                 .onSnapshot((room) => {
                     this.GET_DB_CHANGE(room.data())
-                    console.log(this.state)
                 })
         }
 
@@ -137,6 +136,8 @@ html {
     align-items: center;
     padding-top: 10px;
     height: 56px;
+    text-decoration: none;
+    color: white;
 }
 
 .v-icon {

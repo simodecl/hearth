@@ -1,7 +1,8 @@
 <template>
     <div>
         <router-view v-if="accessToken"></router-view>
-        <div v-else class="btn-container">
+        <p class="disclaimer" v-if="!accessToken">By logging in with Spotify, you grant the app access to your information and let others search and play songs on your account. </p>
+        <div v-if="!accessToken" class="btn-container">
             <a v-bind:href="`/api/v1/spotify/login?room=${this.$route.params.roomid}`" class="btn btn-login"><v-icon>$vuetify.icons.spotify</v-icon> Login with Spotify</a>
         </div>
     </div>
@@ -13,7 +14,7 @@ import axios from 'axios'
 export default {
     created() {
         this.setNav()
-        this.setToken()
+        setTimeout(this.setToken(), 1000)
     },
     computed: {
         accessToken() {
@@ -33,7 +34,7 @@ export default {
             axios.get('/api/v1/spotify/login')
         },
         setToken() {
-            if (this.$route.query && !this.accessToken ) {
+            if (this.$route.query.access_token && !this.accessToken ) {
                 this.$store.dispatch('SET_TOKENS', this.$route.query)
             }
         }
@@ -61,6 +62,12 @@ export default {
 .btn-login .v-icon {
     color: white !important;
     font-size: 1.5rem;
+}
+
+.disclaimer {
+    width: 90vw;
+    text-align: center;
+    margin: 25px auto;
 }
 </style>
 

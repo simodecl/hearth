@@ -21,16 +21,14 @@ export default {
 </script>
 
 <style lang="scss">
-html {
-  overflow: scroll;
-}
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
 }
 
 #app {
-	min-height: 100%;
+  width: 100vw;
+  min-height: 100vh;
 	background-color: $darkgrey;
 	color: white;
 	font-family: 'Lato', sans-serif;
