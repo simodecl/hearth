@@ -111,7 +111,7 @@ html {
 }
 
 .nav-list {
-    height: calc(100vh - 125px);
+    height: calc(100vh - 118px);
     background: url('/assets/bar.png') 100%;
     width: 80px;
 }

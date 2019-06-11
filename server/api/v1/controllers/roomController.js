@@ -4,7 +4,7 @@ const db = require('../../../config/firestore')
 exports.create_room = (req, res, next) => {
     //Generate random 4 digit ID
     const random = Math.floor(1000 + Math.random() * 9000)
-    const newRoom = db.collection('rooms').doc(random.toString()).set({
+    db.collection('rooms').doc(random.toString()).set({
         active: null,
         code: random,
         connections: [],
@@ -18,11 +18,12 @@ exports.create_room = (req, res, next) => {
         spotify_history: [],
 
     })
-    if (newRoom) {
+    .then(() => {
         return res.json(random)
-    } else {
+    })
+    .catch(() => {
         return errorHandler.handleAPIError(505, 'There was a problem trying to create room', next)
-    }
+    })
 }
 
 exports.join_room = (req, res, next) => {

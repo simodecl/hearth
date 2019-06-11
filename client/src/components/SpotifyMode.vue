@@ -41,6 +41,7 @@ export default {
             device: '',
             playstate: null,
             interval: null,
+            ended: false,
         }
     },
     mounted () {
@@ -53,6 +54,7 @@ export default {
                 
                 if (newValue !== null) {
                     this.initiatePlayer()
+                    oldValue = newValue
                 }
             },
         );
@@ -151,7 +153,13 @@ export default {
                     }
                     if(state.paused && state.position === 0 && state.restrictions.disallow_resuming_reasons &&
                         state.restrictions.disallow_resuming_reasons[0] === 'not_paused'){
-                        this.$store.dispatch('PLAY_NEXT_SONG')
+                            if (!this.ended) {
+                                this.ended = true
+                                this.$store.dispatch('PLAY_NEXT_SONG')
+                            } else {
+                                this.ended = false
+                            }
+                        
                     }
                 }
             })
@@ -237,8 +245,8 @@ export default {
 }
 
 .current-thumbnail {
-    width: 20vw;
-    height: 20vw;
+    width: 35vh;
+    height: 35vh;
     margin-right: 5vw;
     box-shadow: 0px 0px 2vw black;
     z-index: 2;
@@ -249,7 +257,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     width: 50vw;
-    height: 20vw;
+    height: 35vh;
     z-index: 2;
 }
 
