@@ -2,15 +2,15 @@
   <v-layout>
     <v-navigation-drawer v-model="drawer" app class="sidenav">
         <div class="logo-container">
-            <img class="logo" src="/assets/hearth_logo_multicolor.png" />
+            <img class="logo" src="./../assets/hearth_logo_multicolor.png" />
         </div>
         <div class="nav-list">
-          <router-link class="nav-list-item" v-for="item in items" :key="item.title" :to="`/app/room/${$route.params.roomid}/${item.link}`">
+          <router-link class="nav-list-item" v-for="item in items" :key="item.title" :to="`/room/${$route.params.roomid}/${item.link}`">
             <v-icon>{{ item.icon }}</v-icon>
             <div>{{ item.title }}</div>
           </router-link>
         </div>
-        <router-link class="nav-exit" to="/app">
+        <router-link class="nav-exit" to="">
           <v-icon>exit_to_app</v-icon>
           <div>Exit room</div>
         </router-link>
@@ -25,12 +25,12 @@
             <slot/>
         <div class="spacer"></div>
         <v-bottom-nav class="tabnav" :class="{ 'push-bottomnav': drawer }" :value="true" absolute>
-            <v-btn :to="`/app/room/${this.$route.params.roomid}/youtube`">
+            <v-btn :to="`/room/${this.$route.params.roomid}/youtube`">
                 <span>Youtube</span>
                 <v-icon>$vuetify.icons.youtube</v-icon>
             </v-btn>
             <v-divider inset vertical></v-divider>
-            <v-btn :to="`/app/room/${this.$route.params.roomid}/spotify`">
+            <v-btn :to="`/room/${this.$route.params.roomid}/spotify`">
                 <span>Spotify</span>
                 <v-icon>$vuetify.icons.spotify</v-icon>
             </v-btn>
@@ -112,7 +112,7 @@ html {
 
 .nav-list {
     height: calc(100vh - 118px);
-    background: url('/assets/bar.png') 100%;
+    background: url('./../assets/bar.png') 100%;
     width: 80px;
 }
 

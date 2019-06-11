@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Join from './views/Join.vue'
-import Room from './views/Room.vue'
 import AppHome from './views/AppHome.vue'
 import AppYoutube from './views/AppYoutube.vue'
 import AppSpotify from './views/AppSpotify.vue'
@@ -18,31 +15,14 @@ import SpotifyFavourites from './views/SpotifyFavourites.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL || 'https://hearthapp.herokuapp.com',
   routes: [
 	{
-		path: '/',
-		name: 'home',
-		component: Home
-	},
-	{
-		path: '/join',
-		name: 'join',
-		component: Join
-	},
-	{
-		path: '/room/:roomid',
-		name: 'room',
-		component: Room
-	},
-	{
-		path: '/app',
+		path: '',
 		name: 'apphome',
 		component: AppHome
 	},
 	{
-		path: "/app/room/:roomid/youtube",
+		path: "/room/:roomid/youtube",
 		name: "AppYoutube",
 		meta: { layout: "navbars" },
 		component: AppYoutube,
@@ -70,7 +50,7 @@ export default new Router({
 		]
 	},
 	{
-		path: "/app/room/:roomid/spotify",
+		path: "/room/:roomid/spotify",
 		name: "AppSpotify",
 		meta: { layout: "navbars" },
 		component: AppSpotify,

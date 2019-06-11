@@ -84,7 +84,7 @@ export default {
         async getVideos() {
             this.active = -1
             this.loading = true
-            const response = await axios.get(`/api/v1/youtube/search?q=${this.searchQuery}`)
+            const response = await axios.get(`https://hearthapp.herokuapp.com/api/v1/youtube/search?q=${this.searchQuery}`)
             this.results = response.data
             this.loading = false
         },

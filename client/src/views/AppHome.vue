@@ -6,7 +6,6 @@
             <input type="text" v-model="code" placeholder="Enter code" />
             <button type="submit" class="btn btn-join">Join room</button>
         </form>
-        <footer class="copyright">&copy; Arteveldehogeschool, Grafische &amp; Digitale Media</footer>
     </div>
 </template>
 
@@ -31,10 +30,10 @@ export default {
                 if (!roomdoc.exists) {
                     this.error = 'This room does not exist'
                 } else {
-                    this.$router.push({ path: `/app/room/${this.code}/youtube` })
+                    this.$router.push({ path: `/room/${this.code}/youtube` })
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 this.error = 'There was a problem trying to join the room.'
             })
         }
